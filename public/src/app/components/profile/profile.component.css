@@ -31,7 +31,7 @@ body{
     text-align: center;
 }
 
-input{
+input.input-search{
     border: red !important;
     border-radius: 5px !important;
     width: 30% !important;
@@ -47,3 +47,16 @@ input{
 .nav-box ul li:nth-child(2){
     margin: 0px 30%;
 }
+
+.profile-box{
+    padding: 10px;
+}
+
+.input-field input:focus + label {
+    color: #2196f3 !important;
+  }
+  /* label underline focus color */
+  .input-field input:focus {
+    border-bottom: 1px solid #2196f3 !important;
+    box-shadow: 0 1px 0 0 #2196f3 !important
+  }

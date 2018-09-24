@@ -19,22 +19,26 @@
   </li>
   <div class="col s2 profile-box">
     <p>My Information</p>
-
-    <form action="/update_personal" method="POST">
+    <form>
       <div class="input-field">
-        <input value="Bassirou" type="text" name="username">
+        <input type="text" name="first_name" value="" placeholder="First Name">
       </div>
       <div class="input-field">
-        <input value="techboss30@gmail.com" type="email" name="email">
+        <input type="text" name="last_name" value="" placeholder="Last Name">
+      </div>
+      <div class="input-field">
+        <input type="text" name="username" value="" placeholder="Username">
+      </div>
+      <div class="input-field">
+        <input type="email" name="email" value="" placeholder="email">
       </div>
       <button class="waves-effect waves-light btn-small right grey darken-3" type="submit">
         <i class="material-icons right">update</i>Update
       </button>
     </form>
-    <br><br><br>
+    <br><br>
     <p>My Password</p>
-
-    <form action="/update_password" method="POST">
+    <form>
       <div class="input-field">
         <input placeholder="Old Password" type="password" name="old_password">
       </div>
@@ -44,15 +48,11 @@
       <div class="input-field">
         <input placeholder="Confirm New Password" type="password" name="confirm_password">
       </div>
-
       <button class="waves-effect waves-light btn-small right grey darken-3" type="submit">
         <i class="material-icons right">update</i>Update
       </button>
     </form>
   </div>
-  <div class="divider"></div>
-  <li><a class="subheader">Subheader</a></li>
-  <li><a class="waves-effect" href="#!">Third Link With Waves</a></li>
 </ul>
 
 
