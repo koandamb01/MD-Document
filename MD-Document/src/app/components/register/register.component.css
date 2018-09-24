@@ -1,0 +1,14 @@
+.register-box{
+    width: 800px;
+    margin: auto;
+    margin-top: 20vh;
+    padding: 25px 15px;
+    text-align: center;
+    border-radius: 10px;
+    box-shadow: 0.5px 0.5px 5px 0.5px #adacac;
+}
+
+.register-box img{
+    width: 60%;
+    height: 60%;
+}
