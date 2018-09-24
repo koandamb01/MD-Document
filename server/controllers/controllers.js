@@ -38,7 +38,7 @@ module.exports = {
                     )
                 )
         }
-    },
+    },  //done
 
     login: (res, req) => {
         User.findOne({ email: req.body.email }, function (err, result) {
@@ -66,16 +66,16 @@ module.exports = {
                     })
             }
         })
-    },
+    },  //done
 
     newDocument: (req, res) => {
         User.findOne({ _id: req.params.UserID })
             .then(
                 user => {
-                    Document.create(req.body)
+                    Documents.create(req.body)
                         .then(
                             document => {
-                                Document.findOneAndUpdate({ _id: document._id }, { $push: { users: user } })
+                                Documents.findOneAndUpdate({ _id: document._id }, { $push: { users: user } })
                                     .then(data => res.json({ status: true, messages: { success: "Document successfully create!" }, document: data }))
                                     .catch(err => {
                                         err => {
@@ -108,8 +108,146 @@ module.exports = {
                     res.json({ status: false, messages: messages });
                 }
             )
+    }, //done
+    
+    updateProfile: (req, res) => {
+
+        // User.findOneAndUpdate({ _id: req.params.UserID }, { $set: req.body }, { runValidators: true, context: 'query' })
+        //     .then(
+        //         data => res.json({ status: true, messages: { success: "Product successfully Updated!" }, product: data })
+        //     )
+        //     .catch(
+        //         err => {
+        //             if (err) {
+        //                 let messages = {}
+        //                 for (let key in err.errors) {
+        //                     messages[key] = err.errors[key].message;
+        //                 }
+        //                 res.json({ status: false, messages: messages });
+        //             }
+        //         }
+        //     )
+    }, //need fix
+
+    deleteDocument: (req, res) =>{
+        Documents.findByIdAndRemove({ _id: req.params.id })
+            .then(
+                data => res.json({ status: true, messages: { success: "Document Successfully Deleted!" } })
+            )
+            .catch(
+                err => {
+                    let messages = {}
+                    for (let key in err.errors) {
+                        messages[key] = err.errors[key].message;
+                    }
+                    res.json({ status: false, messages: messages });
+                }    
+                //or add manual message
+                
+            )
+    }, //fix error message
+
+    updateTitle: (req, res) =>{
+        Documents.findOneAndUpdate({_id: req.params.DocID}, req.boby)
+        .then(
+            data => {
+                res.json({ status: true, messages: { success: "Document Title Successfully Updated!" }})
+            }
+        )
+        .catch(
+            err => {
+                let messages = {}
+                for (let key in err.errors) {
+                    messages[key] = err.errors[key].message;
+                }
+                res.json({ status: false, messages: messages });
+            }
+        )
+            
     },
 
+    addUserToDocument:(req,res) =>{
+        User.findOne({ _id: req.params.id }) //find by ID or Email
+            .then(
+                user => {
+                    Documents.findOneAndUpdate({ _id: req.params.DocID }, { $push: {users:user} })
+                    .then(
+                        result =>{
+                        res.json({ status: true, messages: { success: "User successfully added" } })
+                        }
+                    )
+                    .catch(
+                        err => {
+                            let messages = {}
+                            for (let key in err.errors) {
+                                messages[key] = err.errors[key].message;
+                            }
+                            res.json({ status: false, messages: messages });
+                        }  
+                    )   
+                }         
+            )
+            .catch(
+                err => {
+                    let messages = {}
+                    for (let key in err.errors) {
+                        messages[key] = err.errors[key].message;
+                    }
+                    res.json({ status: false, messages: messages });
+                }             
+            )
+        
+    }, //maybe fix
+
+    inviteUser: (req, res) =>{
+        Documents.findOne({_id: req.params.DocID})
+            .then(
+                data =>{
+                    //findby email?
+                    User.findOne({email: req.body})
+                        .then(
+                            //automated email for invite link to addUserToDocument
+                            data => res.json({ status: true, messages: "Invite Link Sent" })
+                        )
+                        .catch(
+                            err => {
+                                let messages = {}
+                                for (let key in err.errors) {
+                                    messages[key] = err.errors[key].message;
+                                }
+                                res.json({ status: false, messages: messages });
+                            }                          
+                        )
+                }
+            )
+            .catch(
+                //maybe custom error message?
+                err => {
+                    let messages = {}
+                    for (let key in err.errors) {
+                        messages[key] = err.errors[key].message;
+                    }
+                    res.json({ status: false, messages: messages });
+                }        
+            )
+    }, //need more stuff and fix errors
+
+    removeUserFromDoc: (req, res) =>{
+        Documents.findOneAndUpdate({_id: req.params.DocID}, {$pull:{users:{_id: user._id }}})
+        .then(
+            data =>{
+                res.json({ status: true, messages: {success: "User Successfully Removed!"} })
+            }
+        )
+        .catch(
+            error =>{
+
+            res.json({ status: false, message: error })
+            }
+        )
+    
+
+    },  //change ID or EMAIL
 
     all: (req, res) => {
         Product.find({}).sort({ updatedAt: -1 })
