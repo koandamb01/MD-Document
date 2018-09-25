@@ -20,11 +20,15 @@ module.exports = {
             if(err){
                 res.json({ status: false, messages: { server: "*Bcrypt is not working" }, err: err })
             }else{
-
                 req.body.password = hash_pw;
                 User.create(req.body)
                     .then(
-                        user => res.json({ status: true, messages: { success: "User successfully Register!" }, user: user })
+                        user => {
+                        req.session.user_id = user._id
+                        req.session.logged = true
+                        res.json({ status: true, messages: { success: "User successfully Register!" }, user: user })
+
+                        }
                     )
                     .catch(
                         err => {
@@ -50,11 +54,11 @@ module.exports = {
                         if(result){
                             Documents.find({ users: { id: user._id } }, function (err1, data) {
                                 if (err1) {
-                                    console.log("error")
                                     res.json({ status: false, messages: { document: "Could not find any document" } })
                                 }
                                 else {
-                                    console.log("success")
+                                    req.session.user_id = user._id;
+                                    req.session.logged = true;
                                     res.json({ status: true, messages: { success: "Login Sucessful" }, documents: data })
                                 }
                             });
@@ -69,6 +73,15 @@ module.exports = {
             }
         })
     },  //done
+
+    checkStatus: (req, res) =>{
+        if(req.session.logged){
+            res.json({status:true});
+        }
+        else{
+            res.json({status:false});
+        }
+    },
 
     newDocument: (req, res) => {
         User.findOne({ _id: req.params.UserID })

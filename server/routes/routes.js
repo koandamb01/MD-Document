@@ -19,4 +19,6 @@ module.exports = (app) => {
     //need more stuff
     app.put('/removeUserFromDoc/:DocID', Controllers.removeUserFromDoc);
     //need more work 
+
+    app.get('/checkStatus', Controllers.checkStatus);
 }

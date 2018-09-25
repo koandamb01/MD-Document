@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-
+import { HttpService } from '../../http.service';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 
 @Component({
   selector: 'app-profile',
@@ -8,9 +9,25 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ProfileComponent implements OnInit {
 
-  constructor() { }
+  constructor(private _httpService: HttpService,
+    private _route: ActivatedRoute,
+    private _router: Router) { }
 
   ngOnInit() {
+    this.checkStatus();
   }
-
+  checkStatus(){
+    let observable = this._httpService.checkStatus();
+      observable.subscribe(data =>{ 
+        if(data["status"]){
+          console.log("Good")
+        }
+        else{
+          this.goLogin();
+        }
+      })
+  }
+  goLogin(){
+    this._router.navigate(['/']);
+  }
 }
