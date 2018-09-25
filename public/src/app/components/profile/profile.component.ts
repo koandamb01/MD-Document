@@ -14,6 +14,7 @@ export class ProfileComponent implements OnInit {
     private _router: Router) { }
 
   ngOnInit() {
+<<<<<<< HEAD
     // this.checkStatus();
   }
 
@@ -32,6 +33,36 @@ export class ProfileComponent implements OnInit {
 
   logout() {
     localStorage.removeItem('access_token');
+=======
+    this.checkStatus();
+    this.editProfile = {
+      first_name: "",
+      last_name: "",
+      user_name:"",
+      email:""
+    }
+  }
+
+  editProfile: any;
+
+  checkStatus(){
+    let observable = this._httpService.checkStatus();
+      observable.subscribe(data =>{ 
+        if(data["status"]){
+          console.log("Good")
+        }
+        else{
+          this.goLogin();
+        }
+      })
+  }
+
+  updateProfie(){
+    console.log(this.editProfile)
+  }
+
+  goLogin(){
+>>>>>>> 11d19d57faddb05cfdd065c3a17c32170318b861
     this._router.navigate(['/']);
   }
 }

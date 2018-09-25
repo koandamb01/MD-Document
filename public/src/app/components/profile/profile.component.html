@@ -21,18 +21,18 @@
   </li>
   <div class="col s2 profile-box">
     <p>My Information</p>
-    <form>
+    <form (submit)="updateProfile()">
       <div class="input-field">
-        <input type="text" name="first_name" value="" placeholder="First Name">
+        <input type="text" name="first_name" [(ngModel)]="editProfile.first_name">
       </div>
       <div class="input-field">
-        <input type="text" name="last_name" value="" placeholder="Last Name">
+        <input type="text" name="last_name" [(ngModel)]="editProfile.last_name">
       </div>
       <div class="input-field">
-        <input type="text" name="username" value="" placeholder="Username">
+        <input type="text" name="user_name" [(ngModel)]="editProfile.user_name">
       </div>
       <div class="input-field">
-        <input type="email" name="email" value="" placeholder="email">
+        <input type="email" name="email" [(ngModel)]="editProfile.email">
       </div>
       <button class="waves-effect waves-light btn-small right grey darken-3" type="submit">
         <i class="material-icons right">update</i>Update
