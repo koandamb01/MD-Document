@@ -2,6 +2,23 @@ const mongoose = require('./mongoose');
 const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 const uniqueValidator = require("mongoose-unique-validator");
 
+
+const DocumentSchema = new mongoose.Schema({
+    title: {
+        type: String,
+        required: [true, "Document title is required"],
+        minlength: [2, '*Must be at least 2 characters'],
+        default: "Untitled document"
+    },
+    content: {
+        type:String,
+        default: "Type Here"
+    },
+    collaborators: [UserSchema],
+    chats: [ChatSchema]
+}, { timestamps: true });
+
+
 const UserSchema = new mongoose.Schema({
     email: {
         type: String,
@@ -29,25 +46,14 @@ const UserSchema = new mongoose.Schema({
     password: {
         type: String,
         required: [true, "*Password is requied"]
-    }
+    },
+    documents: [DocumentSchema]
 
 }, { timestamps: true });
 
 var ChatSchema = new mongoose.Schema({
     user: UserSchema,
     message: String,
-}, { timestamps: true });
-
-
-DocumentSchema = new mongoose.Schema({
-    title: {
-        type: String,
-        required: [true, "Document title is required"],
-        minlength: [2, '*Must be at least 2 characters']
-    },
-    content: String,
-    Users: [UserSchema],
-    Chats: [ChatSchema]
 }, { timestamps: true });
 
 UserSchema.plugin(uniqueValidator, { message: "Email already exists in the system" });

@@ -23,16 +23,16 @@
     <p>My Information</p>
     <form (submit)="updateProfile()">
       <div class="input-field">
-        <input type="text" name="first_name" [(ngModel)]="editProfile.first_name">
+        <input type="text" name="first_name" >
       </div>
       <div class="input-field">
-        <input type="text" name="last_name" [(ngModel)]="editProfile.last_name">
+        <input type="text" name="last_name" >
       </div>
       <div class="input-field">
-        <input type="text" name="user_name" [(ngModel)]="editProfile.user_name">
+        <input type="text" name="user_name" >
       </div>
       <div class="input-field">
-        <input type="email" name="email" [(ngModel)]="editProfile.email">
+        <input type="email" name="email">
       </div>
       <button class="waves-effect waves-light btn-small right grey darken-3" type="submit">
         <i class="material-icons right">update</i>Update
@@ -65,7 +65,7 @@
       </div>
     </div>
     <div class="docment">
-      <img src="https://ssl.gstatic.com/docs/templates/thumbnails/docs-blank_1.png" alt="">
+      <img (click)="newDocument()" style="cursor: pointer" src="https://ssl.gstatic.com/docs/templates/thumbnails/docs-blank_1.png" alt="">
       <span class="white-text">Blank</span>
     </div>
     <div class="docment">

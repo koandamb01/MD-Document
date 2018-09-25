@@ -14,7 +14,6 @@ export class ProfileComponent implements OnInit {
     private _router: Router) { }
 
   ngOnInit() {
-
   }
 
   logout() {
@@ -25,4 +24,20 @@ export class ProfileComponent implements OnInit {
   goLogin() {
     this._router.navigate(['/']);
   }
+
+  newDocument(){
+    let observable = this._httpService.newDocument();
+      observable.subscribe(response => {
+        if(response["status"]){
+          this._router.navigate(['/document/'+response["document"]["_id"]]);
+        }
+        else(
+          console.log("Error ",response)
+        )
+      });
+  }
+  
+
+
+  
 }

@@ -7,7 +7,7 @@ module.exports = (app) => {
     //done
     app.post('/updateProfile/:UserID', Controllers.updateProfile);
     //need fix
-    app.post('/newDocument/:UserID', Controllers.newDocument);
+    app.get('/newDocument', Controllers.newDocument);
     //done
     app.delete('/deleteDocument/:DocId', Controllers.deleteDocument);
     //done
@@ -19,6 +19,8 @@ module.exports = (app) => {
     //need more stuff
     app.put('/removeUserFromDoc/:DocID', Controllers.removeUserFromDoc);
     //need more work 
+
+    app.get('/getUser', Controllers.getUserInfo)
 
     app.get('/checkStatus', Controllers.checkStatus);
 }

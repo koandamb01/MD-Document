@@ -82,23 +82,14 @@ module.exports = {
     },
 
     newDocument: (req, res) => {
-        User.findOne({ _id: req.params.UserID })
+        Documents.create({})
             .then(
-                user => {
-                    Documents.create(req.body)
+                document =>{
+                    console.log(req.session.user_id, document)
+                    User.findOneAndUpdate({ _id: req.session.user_id }, {$push:{documents: document}})
                         .then(
-                            document => {
-                                Documents.findOneAndUpdate({ _id: document._id }, { $push: { users: user } })
-                                    .then(data => res.json({ status: true, messages: { success: "Document successfully create!" }, document: data }))
-                                    .catch(err => {
-                                        err => {
-                                            let messages = {}
-                                            for (let key in err.errors) {
-                                                messages[key] = err.errors[key].message;
-                                            }
-                                            res.json({ status: false, messages: messages });
-                                        }
-                                    });
+                            data =>{
+                                res.json({ status: true, messages: { success: "Document successfully created!" }, document: document })
                             }
                         )
                         .catch(
@@ -107,7 +98,7 @@ module.exports = {
                                 for (let key in err.errors) {
                                     messages[key] = err.errors[key].message;
                                 }
-                                res.json({ status: false, messages: messages });
+                                res.json({ status: false, messages: "Error Updating User" });
                             }
                         )
                 }
@@ -118,7 +109,8 @@ module.exports = {
                     for (let key in err.errors) {
                         messages[key] = err.errors[key].message;
                     }
-                    res.json({ status: false, messages: messages });
+                    console.log("Error creating document", err)
+                    res.json({ status: false, messages: "Error creating document" });
                 }
             )
     }, //done
@@ -255,12 +247,23 @@ module.exports = {
             .catch(
                 error => {
 
-                    res.json({ status: false, message: error })
+                    res.json({ status: false, messages: error })
                 }
             )
 
 
     },  //change ID or EMAIL
+
+    getUserInfo: (req, res) =>{
+        User.findOne({_id: req.session.user_id})
+        .then(
+            user => res.json({status: true, data: user})
+        )
+        .catch(
+            error => res.json({status: false, messages: error})
+        )
+    },
+
 
     all: (req, res) => {
         Product.find({}).sort({ updatedAt: -1 })

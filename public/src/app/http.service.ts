@@ -31,6 +31,14 @@ export class HttpService {
     })
   }
 
+  // getUser(){
+  //   return this._http.get('/getUser')
+  // }
+
+  newDocument(){
+    return this._http.get('/newDocument')    
+  }
+
   isAuthenticated() {
     let token = localStorage.getItem('access_token');
     console.log("Token: ", token);
