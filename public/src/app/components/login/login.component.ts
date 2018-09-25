@@ -27,8 +27,18 @@ logUser:any;
       let observable = this._httpService.login(this.logUser);
       observable.subscribe(data =>{    
         console.log(data)
+        if(data["status"]){
+          this.goProfile()
+        }
+        else{
+
+        }
       })
     
+  }
+
+  goProfile(){
+    this._router.navigate(['/profile']);
   }
 
 }

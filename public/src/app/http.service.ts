@@ -16,4 +16,7 @@ export class HttpService {
     console.log("form data: ", data);
     return this._http.post('/login', data);
   }
+  checkStatus() {
+    return this._http.get('/checkStatus')
+  }
 }
