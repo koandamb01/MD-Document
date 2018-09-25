@@ -9,11 +9,22 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 })
 export class ProfileComponent implements OnInit {
 
-  constructor(private _httpService: HttpService,
+  constructor(
+    private _httpService: HttpService,
     private _route: ActivatedRoute,
     private _router: Router) { }
 
+  // variables
+  user: any;
+  user_id: any;
+  messages: any;
+  passwordInfo: any
   ngOnInit() {
+    this.user = { first_name: "", last_name: "", user_name: "", email: "" };
+    this.passwordInfo = { old_password: "", password: "", confirm_password: "" };
+    this.messages = { success: "", first_name: "", last_name: "", email: "", user_name: "", password: "", confirm_password: "" };
+    this.getUserID();
+    this.getUserInfo();
   }
 
   logout() {
@@ -25,19 +36,45 @@ export class ProfileComponent implements OnInit {
     this._router.navigate(['/']);
   }
 
-  newDocument(){
-    let observable = this._httpService.newDocument();
-      observable.subscribe(response => {
-        if(response["status"]){
-          this._router.navigate(['/document/'+response["document"]["_id"]]);
-        }
-        else(
-          console.log("Error ",response)
-        )
-      });
+  getUserID() {
+    this.user_id = localStorage.getItem('access_token');
   }
-  
+
+  // get the user information
+  getUserInfo() {
+    let obs = this._httpService.getOne(this.user_id);
+    obs.subscribe(response => {
+      if (response['status'] == false) {
+        this.messages = response['messages'];
+      }
+      else {
+        this.user = response['user'];
+      }
+    });
+  }
+
+  // updated personal info
+  UpdatePersonalInfo() {
+    let obs = this._httpService.updatePersonalInfo(this.user_id, this.user);
+    obs.subscribe(response => {
+      if (response['status'] == false) {
+        this.messages = response['messages'];
+      }
+      else {
+        this.messages = response['messages'];
+        setTimeout(() => { this.ngOnInit() }, 2000);
+      }
+    })
+  }
 
 
-  
+  updatePassword() {
+    if (this.passwordInfo.password != this.passwordInfo.confirm_password) {
+      this.messages['status'] = false;
+      this.messages['confirm_password'] = "Missmatch password";
+    }
+    else {
+
+    }
+  }
 }
