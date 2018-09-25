@@ -9,12 +9,12 @@ var io = require('socket.io')(server);
 var Chat = require('./server/models/models');
 
 var session = require("express-session")
-app.set('trust proxy', 1) 
+app.set('trust proxy', 1)
 app.use(session({
     secret: "dankmemesareneverdankenough",
     resave: false,
     saveUninitialized: true,
-    cookie: {maxAge: 160000}
+    cookie: { maxAge: 160000 }
 }))
 
 app.use(bodyParser.json());
