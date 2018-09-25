@@ -19,12 +19,7 @@ module.exports = {
         bcrypt.hash(req.body.password, 10).then((hash_pw, err) => {
             if (err) {
                 res.json({ status: false, messages: { server: "*Bcrypt is not working" }, err: err })
-<<<<<<< HEAD
-            } else {
-
-=======
             }else{
->>>>>>> e05d31738aaaa90745fc58d1a6182bc39a6fdf70
                 req.body.password = hash_pw;
                 User.create(req.body)
                     .then(

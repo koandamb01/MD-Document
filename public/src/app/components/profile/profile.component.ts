@@ -15,7 +15,16 @@ export class ProfileComponent implements OnInit {
 
   ngOnInit() {
     this.checkStatus();
+    this.editProfile = {
+      first_name: "",
+      last_name: "",
+      user_name:"",
+      email:""
+    }
   }
+
+  editProfile: any;
+
   checkStatus(){
     let observable = this._httpService.checkStatus();
       observable.subscribe(data =>{ 
@@ -27,6 +36,11 @@ export class ProfileComponent implements OnInit {
         }
       })
   }
+
+  updateProfie(){
+    console.log(this.editProfile)
+  }
+
   goLogin(){
     this._router.navigate(['/']);
   }
