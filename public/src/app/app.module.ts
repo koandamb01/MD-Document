@@ -9,8 +9,12 @@ import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { AppRoutingModule } from './/app-routing.module';
+<<<<<<< HEAD
 import { LogregComponent } from './components/logreg/logreg.component';
 import { NotfoundComponent } from './components/notfound/notfound.component';
+=======
+import { DocumentComponent } from './components/document/document.component';
+>>>>>>> editorpage
 
 @NgModule({
   declarations: [
@@ -18,8 +22,12 @@ import { NotfoundComponent } from './components/notfound/notfound.component';
     LoginComponent,
     RegisterComponent,
     ProfileComponent,
+<<<<<<< HEAD
     LogregComponent,
     NotfoundComponent
+=======
+    DocumentComponent
+>>>>>>> editorpage
   ],
   imports: [
     BrowserModule,
