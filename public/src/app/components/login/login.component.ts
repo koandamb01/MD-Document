@@ -32,12 +32,11 @@ export class LoginComponent implements OnInit {
       else {
         // set token
         this.messages = response['messages'];
-        localStorage.setItem('access_token', "jwt_token");
+        localStorage.setItem('access_token', response['user_id']);
         setTimeout(() => { this.goProfile(); }, 1000);
       }
     });
   }
-
 
   goProfile() {
     this._router.navigate(['/profile']);

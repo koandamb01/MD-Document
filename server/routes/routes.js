@@ -1,12 +1,18 @@
 const Controllers = require('../controllers/controllers');
 
 module.exports = (app) => {
+
+    app.get('/getOne/:id', Controllers.getOne);
+
     app.post('/register', Controllers.register);
     //done
     app.post('/login', Controllers.login);
     //done
-    app.post('/updateProfile/:UserID', Controllers.updateProfile);
-    //need fix
+
+    app.post('/updatePersonalInfo/:UserID', Controllers.updatePersonalInfo);
+
+    app.post('/updatePassword/:UserID', Controllers.updatePassword);
+
     app.post('/newDocument/:UserID', Controllers.newDocument);
     //done
     app.delete('/deleteDocument/:DocId', Controllers.deleteDocument);

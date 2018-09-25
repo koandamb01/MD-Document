@@ -17,11 +17,7 @@ module.exports = {
         bcrypt.hash(req.body.password, 10).then((hash_pw, err) => {
             if (err) {
                 res.json({ status: false, messages: { server: "*Bcrypt is not working" }, err: err })
-<<<<<<< HEAD
             } else {
-=======
-            }else{
->>>>>>> 11d19d57faddb05cfdd065c3a17c32170318b861
                 req.body.password = hash_pw;
                 User.create(req.body)
                     .then(
@@ -53,19 +49,12 @@ module.exports = {
                 bcrypt.compare(req.body.password, user.password)
                     .then((result) => {
                         if (result) {
-                            Documents.find({ users: { id: user._id } }, function (err1, data) {
-                                if (err1) {
-                                    res.json({ status: false, messages: { document: "Could not find any document" } });
-                                }
-                                else {
-                                    req.session.user_id = user._id;
-                                    req.session.logged = true;
-                                    res.json({ status: true, messages: { success: "Login Sucessful" }, documents: data });
-                                }
-                            });
+                            req.session.user_id = user._id
+                            req.session.logged = true
+                            res.json({ status: true, messages: { success: "Login Sucessful" }, user_id: user._id });
                         }
                         else {
-                            res.json({ status: false, message: { login: "Email or password invalid." } });
+                            res.json({ status: false, messages: { login: "Email or password invalid." } });
                         }
                     })
                     .catch((err) => {
@@ -77,7 +66,7 @@ module.exports = {
 
     checkStatus: (req, res) => {
         if (req.session.logged == true && req.session.user_id) {
-            res.json({ status: true });
+            res.json({ status: true, user_id: req.session.user_id });
         }
         else {
             res.json({ status: false });
@@ -126,24 +115,29 @@ module.exports = {
             )
     }, //done
 
-    updateProfile: (req, res) => {
+    updatePersonalInfo: (req, res) => {
+        User.findOneAndUpdate({ _id: req.params.UserID }, { $set: { first_name: req.body.first_name, last_name: req.body.last_name, user_name: req.body.user_name, email: req.body.email } }, { runValidators: true, context: 'query' })
+            .then(
+                data => res.json({ status: true, messages: { success: "Personal Info successfully Updated!" }, user: data })
+            )
+            .catch(
+                err => {
+                    if (err) {
+                        let messages = {}
+                        for (let key in err.errors) {
+                            messages[key] = err.errors[key].message;
+                        }
+                        res.json({ status: false, messages: messages });
+                    }
+                }
+            )
+    },
 
-        // User.findOneAndUpdate({ _id: req.params.UserID }, { $set: req.body }, { runValidators: true, context: 'query' })
-        //     .then(
-        //         data => res.json({ status: true, messages: { success: "Product successfully Updated!" }, product: data })
-        //     )
-        //     .catch(
-        //         err => {
-        //             if (err) {
-        //                 let messages = {}
-        //                 for (let key in err.errors) {
-        //                     messages[key] = err.errors[key].message;
-        //                 }
-        //                 res.json({ status: false, messages: messages });
-        //             }
-        //         }
-        //     )
-    }, //need fix
+    // updatePassword(req, res){
+
+    // }
+
+
 
     deleteDocument: (req, res) => {
         Documents.findByIdAndRemove({ _id: req.params.id })
@@ -276,12 +270,12 @@ module.exports = {
     },
 
     getOne: (req, res) => {
-        Product.findOne({ _id: req.params.id })
+        User.findOne({ _id: req.params.id })
             .then(
-                data => res.json({ status: true, product: data })
+                data => res.json({ status: true, user: data })
             )
             .catch(
-                error => res.json({ status: false, message: error })
+                error => res.json({ status: false, messages: error })
             )
     },
 

@@ -11,8 +11,6 @@ export class HttpService {
   logged: any;
   constructor(private _http: HttpClient,
     private _router: Router) {
-    console.log('Http Service');
-    this.logged = this.checkStatus();
   }
 
   register(newUser) {
@@ -24,17 +22,23 @@ export class HttpService {
   }
 
   checkStatus() {
-    let obs = this._http.get('/checkStatus');
-    obs.subscribe(response => {
-      console.log("http: ", response['status']);
-      return response['status'];
-    })
+    return this._http.get('/checkStatus');
   }
+
+  getOne(userID) {
+    return this._http.get('/getOne/' + userID);
+  }
+
+  updatePersonalInfo(userID, userInfo) {
+    return this._http.post('/updatePersonalInfo/' + userID, userInfo);
+  }
+
+
+
 
   isAuthenticated() {
     let token = localStorage.getItem('access_token');
     console.log("Token: ", token);
-
     if (token) { return true; } else { return false; }
   }
 }

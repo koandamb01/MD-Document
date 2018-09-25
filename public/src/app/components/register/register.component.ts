@@ -25,7 +25,6 @@ export class RegisterComponent implements OnInit {
     this.confirm_password = "";
     this.newUser = { first_name: "", last_name: "", email: "", user_name: "", password: "" };
     this.messages = { success: "", first_name: "", last_name: "", email: "", user_name: "", password: "", confirm_password: "" };
-
   }
   register() {
     if (this.newUser.password == this.confirm_password) {
