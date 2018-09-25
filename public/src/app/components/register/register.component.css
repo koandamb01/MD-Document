@@ -12,3 +12,10 @@
     width: 60%;
     height: 60%;
 }
+
+.register-box a{
+    display: block;
+    text-align: center;
+    text-decoration: underline;
+    margin-top: 15px;
+}

@@ -2,18 +2,19 @@
   <div class="login-box">
     <h3 class="text blue-text">MD Document</h3>
     <p>Sign In</p>
-    <form>
+    <form (submit)="login()">
       <div class="row">
         <div class="input-field col s12">
-          <input type="text" placeholder="Enter your email">
+          <input [(ngModel)]="logUser.email" ngModel name="email" type="email" placeholder="Enter your email">
         </div>
       </div>
       <div class="row">
         <div class="input-field col s12">
-          <input type="text" placeholder="Enter your password">
+          <input [(ngModel)]="logUser.password" ngModel name="password" type="password" placeholder="Enter your password">
         </div>
       </div>
       <button class="waves-effect waves-light btn-small blue">Login</button>
+      <a [routerLink]="['/register']">Register</a>
     </form>
   </div>
 </div>

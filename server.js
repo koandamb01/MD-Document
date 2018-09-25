@@ -11,6 +11,27 @@ var Chat = require('./server/models/models');
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, './public/dist/MD-Document')));
 
+require("./server/routes/routes")(app);
+
+// this route will be triggered if any of the routes above did not match
+app.all("*", (req, res, next) => {
+    res.sendFile(path.resolve("./public/dist/MD-Document/index.html"))
+});
+
+
+app.listen(8000, () => {
+    console.log("Server is running in port 8000");
+});
+
+
+
+
+
+
+
+
+
+
 
 // // socket io
 // io.on('connection', function (socket) {
@@ -39,13 +60,3 @@ app.use(express.static(path.join(__dirname, './public/dist/MD-Document')));
 //         res.json(post);
 //     });
 // });
-
-
-// this route will be triggered if any of the routes above did not match
-app.all("*", (req, res, next) => {
-    res.sendFile(path.resolve("./public/dist/public/index.html"))
-});
-
-app.listen(8000, () => {
-    console.log("Server is running in port 8000");
-});
