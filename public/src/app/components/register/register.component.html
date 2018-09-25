@@ -2,28 +2,33 @@
   <div class="register-box">
     <h3 class="text blue-text">MD Document</h3>
     <p>Create your MD Document Account</p>
+    <span class="green-text" *ngIf="messages.success">{{ messages.success }}</span>
     <div class="row">
       <div class="col s6">
         <form (submit)="register()">
           <div class="row">
             <div class="input-field col s6">
-              <input ngModel name="first_name" [(ngModel)]="newUser.first_name" type="text" class="validate">
+              <input name="first_name" [(ngModel)]="newUser.first_name" type="text" class="validate">
               <label for="first_name">First Name</label>
+              <span class="red-text left" *ngIf="messages.first_name">{{ messages.first_name }}</span>
             </div>
             <div class="input-field col s6">
               <input ngModel name="last_name" [(ngModel)]="newUser.last_name" type="text" class="validate">
               <label for="last_name">Last Name</label>
+              <span class="red-text left" *ngIf="messages.last_name">{{ messages.last_name }}</span>
             </div>
           </div>
 
           <div class="row">
             <div class="input-field col s6">
-              <input ngModel name="username" [(ngModel)]="newUser.user_name" type="text" class="validate">
+              <input ngModel name="use_rname" [(ngModel)]="newUser.user_name" type="text" class="validate">
               <label for="username">Username</label>
+              <span class="red-text left" *ngIf="messages.user_name">{{ messages.user_name }}</span>
             </div>
             <div class="input-field col s6">
               <input ngModel name="email" [(ngModel)]="newUser.email" type="email" class="validate">
               <label for="email">Email</label>
+              <span class="red-text left" *ngIf="messages.email">{{ messages.email }}</span>
             </div>
           </div>
 
@@ -31,10 +36,12 @@
             <div class="input-field col s6">
               <input ngModel name="password" [(ngModel)]="newUser.password" type="password" class="validate">
               <label for="password">Password</label>
+              <span class="red-text left" *ngIf="messages.password">{{ messages.password }}</span>
             </div>
             <div class="input-field col s6">
-              <input ngModel [(ngModel)]="confirmPassword" name="confirm_password" type="password" class="validate">
+              <input ngModel [(ngModel)]="confirm_password" name="confirm_password" type="password" class="validate">
               <label for="confirm_password">Confirm Passoword</label>
+              <span class="red-text left" *ngIf="messages.confirm_password">{{ messages.confirm_password }}</span>
             </div>
           </div>
 

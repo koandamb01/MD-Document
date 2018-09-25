@@ -8,14 +8,12 @@ export class HttpService {
 
   constructor(private _http: HttpClient) { }
 
-  register(data){
+  register(data) {
     return this._http.post('/register', data);
   }
 
-  login(data){
+  login(data) {
     console.log("form data: ", data);
     return this._http.post('/login', data);
   }
-
-
 }

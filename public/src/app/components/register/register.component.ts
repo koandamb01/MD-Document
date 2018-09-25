@@ -9,35 +9,40 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
   styleUrls: ['./register.component.css']
 })
 export class RegisterComponent implements OnInit {
-message: string;
-newUser: any;
-confirmPassword: string;
+  messages: any;
+  newUser: any;
+  confirm_password: string;
   constructor(
     private _httpService: HttpService,
     private _route: ActivatedRoute,
     private _router: Router
   ) { }
 
-  ngOnInit() {
-    this.newUser = {
-      first_name: "",
-      last_name: "",
-      email: "",
-      user_name: "",
-      password: "",
-    }
+  goProfile() {
+    this._router.navigate(['/profile']);
   }
-  register(){
-    if(this.newUser.password == this.confirmPassword){
-      console.log (this.newUser)
+  ngOnInit() {
+    this.confirm_password = "";
+    this.newUser = { first_name: "", last_name: "", email: "", user_name: "", password: "" };
+    this.messages = { success: "", first_name: "", last_name: "", email: "", user_name: "", password: "", confirm_password: "" };
+
+  }
+  register() {
+    if (this.newUser.password == this.confirm_password) {
       let observable = this._httpService.register(this.newUser);
-      observable.subscribe(data =>{    
-        console.log(data)
-      })
+      observable.subscribe(response => {
+        if (response['status'] == false) {
+          this.messages = response['messages'];
+        }
+        else {
+          this.messages = response['messages'];
+          setTimeout(() => { this.ngOnInit() }, 2000);
+        }
+      });
     }
-    else{
-      this.message = "Password does not match with confirmation";
-      console.log(this.message)
+    else {
+      this.messages['status'] = false;
+      this.messages['confirm_password'] = "Missmatch password";
     }
   }
 }
