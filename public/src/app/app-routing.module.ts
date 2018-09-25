@@ -1,17 +1,17 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { AuthGuard } from './guards/auth.guard';
 
 import { Routes, RouterModule } from '@angular/router';
 import { NotfoundComponent } from './components/notfound/notfound.component';
 import { LoginComponent } from './components/login/login.component';
-import { LogregComponent } from './components/logreg/logreg.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { RegisterComponent } from './components/register/register.component';
 
 const routes: Routes = [
-  { path: 'profile',component: ProfileComponent },
-  { path: '',component: LoginComponent },
-  { path: 'signin',component: LoginComponent },
+  { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
+  { path: '', component: LoginComponent },
+  { path: 'signin', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
 
   // use a colon and parameter name to include a parameter in the url
@@ -28,6 +28,7 @@ const routes: Routes = [
     CommonModule
   ],
   exports: [RouterModule],
+  providers: [AuthGuard],
   declarations: []
 })
 export class AppRoutingModule { }

@@ -8,44 +8,69 @@
         <form (submit)="register()">
           <div class="row">
             <div class="input-field col s6">
-              <input name="first_name" [(ngModel)]="newUser.first_name" type="text" class="validate">
+              <input name="first_name" #first_name="ngModel" minlength="3" [(ngModel)]="newUser.first_name" type="text"
+                class="validate" required>
               <label for="first_name">First Name</label>
               <span class="red-text left" *ngIf="messages.first_name">{{ messages.first_name }}</span>
+              <div *ngIf="!first_name.valid && (first_name.dirty || first_name.touched)">
+                <span class="red-text" *ngIf="first_name.errors.required">*First_name is required.</span>
+                <span class="red-text" *ngIf="first_name.errors.minlength">*Must be at least 3 characters.</span>
+              </div>
             </div>
             <div class="input-field col s6">
-              <input ngModel name="last_name" [(ngModel)]="newUser.last_name" type="text" class="validate">
+              <input name="last_name" #last_name="ngModel" minlength="3" [(ngModel)]="newUser.last_name" type="text"
+                class="validate" required>
               <label for="last_name">Last Name</label>
               <span class="red-text left" *ngIf="messages.last_name">{{ messages.last_name }}</span>
+              <div *ngIf="!last_name.valid && (last_name.dirty || last_name.touched)">
+                <span class="red-text" *ngIf="last_name.errors.required">*Last_name is required.</span>
+                <span class="red-text" *ngIf="last_name.errors.minlength">*Must be at least 3 characters.</span>
+              </div>
             </div>
           </div>
 
           <div class="row">
             <div class="input-field col s6">
-              <input ngModel name="use_rname" [(ngModel)]="newUser.user_name" type="text" class="validate">
+              <input name="use_rname" #user_name="ngModel" minlength="3" [(ngModel)]="newUser.user_name" type="text"
+                class="validate" required>
               <label for="username">Username</label>
               <span class="red-text left" *ngIf="messages.user_name">{{ messages.user_name }}</span>
+              <div *ngIf="!user_name.valid && (user_name.dirty || user_name.touched)">
+                <span class="red-text" *ngIf="user_name.errors.required">*User Name is required.</span>
+                <span class="red-text" *ngIf="user_name.errors.minlength">*Must be at least 3 characters.</span>
+              </div>
             </div>
             <div class="input-field col s6">
-              <input ngModel name="email" [(ngModel)]="newUser.email" type="email" class="validate">
+              <input name="email" #email="ngModel" [(ngModel)]="newUser.email" type="email" class="validate" required>
               <label for="email">Email</label>
               <span class="red-text left" *ngIf="messages.email">{{ messages.email }}</span>
+              <div *ngIf="!email.valid && (email.dirty || email.touched)">
+                <span class="red-text" *ngIf="email.errors.required">*Email is required.</span>
+                <span class="red-text" *ngIf="email.errors.minlength">*Must be at least 3 characters.</span>
+              </div>
             </div>
           </div>
 
           <div class="row">
             <div class="input-field col s6">
-              <input ngModel name="password" [(ngModel)]="newUser.password" type="password" class="validate">
+              <input name="password" #password="ngModel" minlength="8" [(ngModel)]="newUser.password" type="password"
+                class="validate" required>
               <label for="password">Password</label>
               <span class="red-text left" *ngIf="messages.password">{{ messages.password }}</span>
+              <div *ngIf="!password.valid && (password.dirty || password.touched)">
+                <span class="red-text" *ngIf="password.errors.required">*Password is required.</span>
+                <span class="red-text" *ngIf="password.errors.minlength">*Must be at least 8 characters.</span>
+              </div>
             </div>
             <div class="input-field col s6">
-              <input ngModel [(ngModel)]="confirm_password" name="confirm_password" type="password" class="validate">
+              <input [(ngModel)]="confirm_password" minlength="8" name="confirm_password" type="password" class="validate"
+                required>
               <label for="confirm_password">Confirm Passoword</label>
               <span class="red-text left" *ngIf="messages.confirm_password">{{ messages.confirm_password }}</span>
             </div>
           </div>
 
-          <button class="waves-effect waves-light btn-small blue">Register</button>
+          <button class="waves-effect waves-light btn-small blue" [disabled]="!first_name.valid || !last_name.valid || !user_name.valid || !email.valid || !password.valid">Register</button>
           <a [routerLink]="['/']">Sign In</a>
         </form>
       </div>

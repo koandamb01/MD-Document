@@ -1,8 +1,10 @@
 <div class="nav-box">
   <ul>
-    <li><a href="#" data-target="slide-out" class="sidenav-trigger"><i class="material-icons">menu</i></a></li>
+    <li><a href="#" style="cursor: pointer;" data-target="slide-out" class="sidenav-trigger"><i class="material-icons">menu</i></a></li>
     <li><input class="input-search" type="text" placeholder="search"></li>
     <li><a><i class="material-icons grey-text">notifications</i></a></li>
+    <li><a style="cursor: pointer;" (click)="logout()" class="tooltpped" data-position="bottom" data-tooltip="Logout"><i
+          class="material-icons red-text">logout</i></a></li>
   </ul>
 </div>
 

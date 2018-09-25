@@ -14,20 +14,24 @@ export class ProfileComponent implements OnInit {
     private _router: Router) { }
 
   ngOnInit() {
-    this.checkStatus();
+    // this.checkStatus();
   }
-  checkStatus(){
-    let observable = this._httpService.checkStatus();
-      observable.subscribe(data =>{ 
-        if(data["status"]){
-          console.log("Good")
-        }
-        else{
-          this.goLogin();
-        }
-      })
-  }
-  goLogin(){
+
+  // checkStatus() {
+  //   console.log("Im here");
+  //   let observable = this._httpService.checkStatus();
+  //   observable.subscribe(response => {
+  //     if (response["status"] == false) {
+  //       this.goLogin();
+  //     }
+  //   })
+  // }
+  // goLogin() {
+  //   this._router.navigate(['/']);
+  // }
+
+  logout() {
+    localStorage.removeItem('access_token');
     this._router.navigate(['/']);
   }
 }

@@ -36,7 +36,7 @@ export class RegisterComponent implements OnInit {
         }
         else {
           this.messages = response['messages'];
-          setTimeout(() => { this.ngOnInit() }, 2000);
+          setTimeout(() => { this.goProfile() }, 2000);
         }
       });
     }

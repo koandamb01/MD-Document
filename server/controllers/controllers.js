@@ -14,25 +14,17 @@ module.exports = {
             res.json({ status: false, messages: { password: "*Must be at 8 characters" } })
         }
 
-        console.log("password here: ", req.body.password);
-
         bcrypt.hash(req.body.password, 10).then((hash_pw, err) => {
             if (err) {
                 res.json({ status: false, messages: { server: "*Bcrypt is not working" }, err: err })
-<<<<<<< HEAD
             } else {
-
-=======
-            }else{
->>>>>>> e05d31738aaaa90745fc58d1a6182bc39a6fdf70
                 req.body.password = hash_pw;
                 User.create(req.body)
                     .then(
                         user => {
-                        req.session.user_id = user._id
-                        req.session.logged = true
-                        res.json({ status: true, messages: { success: "User successfully Register!" }, user: user })
-
+                            req.session.user_id = user._id
+                            req.session.logged = true
+                            res.json({ status: true, messages: { success: "User successfully Register!" }, user: user })
                         }
                     )
                     .catch(
@@ -51,7 +43,7 @@ module.exports = {
     login: (req, res) => {
         User.findOne({ email: req.body.email }, function (err, user) {
             if (err || user == null) {
-                res.json({ status: false, messages: { login: "Login Failed" } })
+                res.json({ status: false, messages: { login: "Email or password invalid." } })
             }
             else {
                 bcrypt.compare(req.body.password, user.password)
@@ -59,32 +51,32 @@ module.exports = {
                         if (result) {
                             Documents.find({ users: { id: user._id } }, function (err1, data) {
                                 if (err1) {
-                                    res.json({ status: false, messages: { document: "Could not find any document" } })
+                                    res.json({ status: false, messages: { document: "Could not find any document" } });
                                 }
                                 else {
                                     req.session.user_id = user._id;
                                     req.session.logged = true;
-                                    res.json({ status: true, messages: { success: "Login Sucessful" }, documents: data })
+                                    res.json({ status: true, messages: { success: "Login Sucessful" }, documents: data });
                                 }
                             });
                         }
                         else {
-                            res.json({ status: false, message: { login: "Login Failed" } })
+                            res.json({ status: false, message: { login: "Email or password invalid." } });
                         }
                     })
                     .catch((err) => {
-                        res.json({ status: false, messages: { login: "Bcrypt Failed" } })
+                        res.json({ status: false, messages: { login: "Email or password invalid." } })
                     });
             }
         })
     },  //done
 
-    checkStatus: (req, res) =>{
-        if(req.session.logged){
-            res.json({status:true});
+    checkStatus: (req, res) => {
+        if (req.session.logged == true && req.session.user_id) {
+            res.json({ status: true });
         }
-        else{
-            res.json({status:false});
+        else {
+            res.json({ status: false });
         }
     },
 

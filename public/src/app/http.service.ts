@@ -1,22 +1,40 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { CanActivate, Router } from '@angular/router';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class HttpService {
 
-  constructor(private _http: HttpClient) { }
-
-  register(data) {
-    return this._http.post('/register', data);
+  logged: any;
+  constructor(private _http: HttpClient,
+    private _router: Router) {
+    console.log('Http Service');
+    this.logged = this.checkStatus();
   }
 
-  login(data) {
-    console.log("form data: ", data);
-    return this._http.post('/login', data);
+  register(newUser) {
+    return this._http.post('/register', newUser);
   }
+
+  login(user) {
+    return this._http.post('/login', user);
+  }
+
   checkStatus() {
-    return this._http.get('/checkStatus')
+    let obs = this._http.get('/checkStatus');
+    obs.subscribe(response => {
+      console.log("http: ", response['status']);
+      return response['status'];
+    })
+  }
+
+  isAuthenticated() {
+    let token = localStorage.getItem('access_token');
+    console.log("Token: ", token);
+
+    if (token) { return true; } else { return false; }
   }
 }

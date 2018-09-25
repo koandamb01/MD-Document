@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpService } from '../../http.service';
+import { AuthGuard } from '../../guards/auth.guard';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 
 @Component({
@@ -9,36 +10,36 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 })
 export class LoginComponent implements OnInit {
 
-message:string;
-logUser:any;
+  messages: any;
+  logUser: any;
 
   constructor(private _httpService: HttpService,
     private _route: ActivatedRoute,
-    private _router: Router) { }
+    private _router: Router,
+    private _authGuard: AuthGuard) { }
 
   ngOnInit() {
-    this.logUser = {
-      email: "",
-      password: "",
-    }
+    this.logUser = { email: "", password: "" };
+    this.messages = { success: "", login: "" };
   }
 
-  login(){
-      let observable = this._httpService.login(this.logUser);
-      observable.subscribe(data =>{    
-        console.log(data)
-        if(data["status"]){
-          this.goProfile()
-        }
-        else{
-
-        }
-      })
-    
+  login() {
+    let obs = this._httpService.login(this.logUser);
+    obs.subscribe(response => {
+      if (response['status'] == false) {
+        this.messages = response['messages'];
+      }
+      else {
+        // set token
+        this.messages = response['messages'];
+        localStorage.setItem('access_token', "jwt_token");
+        setTimeout(() => { this.goProfile(); }, 1000);
+      }
+    });
   }
 
-  goProfile(){
+
+  goProfile() {
     this._router.navigate(['/profile']);
   }
-
 }
