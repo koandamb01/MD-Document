@@ -23,9 +23,7 @@ module.exports = {
 
     // ######## REGISTRATION ######### //
     register: (req, res) => {
-
         const errors = validationResult(req);
-
         if (!errors.isEmpty()) {
             let messages = {}
             var err = errors.mapped({ onlyFirstError: false });
@@ -55,35 +53,51 @@ module.exports = {
                         }
                     });
 
+                    console.log("query: ", query);
+
                 }
             })
         }
     },
 
+    login: (req, res) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            res.json({ status: false, messages: { login: "Email or password invalid." } });
+        }
+        else {
+            let data = { email: req.body.email };
+            sql = 'SELECT * FROM users WHERE ?';
+            db.query(sql, data, (err, user) => {
+                if (err) {
+                    res.json({ status: false, messages: { login: "Email or password invalid." } });
+                }
+                else if (user.length == 0) {
+                    res.json({ status: false, messages: { login: "Email or password invalid." } });
+                }
+                else {
+                    console.log("user: ", user);
+                    bcrypt.compare(req.body.password, user[0].password)
+                        .then((result) => {
+                            if (result) {
+                                req.session.user_id = user.id
+                                req.session.logged = true
+                                res.json({ status: true, messages: { success: "Login Sucessful" }, user_id: user.id });
+                            }
+                            else {
+                                res.json({ status: false, messages: { login: "Email or password invalid." } });
+                            }
+                        })
+                        .catch((err) => {
+                            res.json({ status: false, messages: { login: "Email or password invalid." } })
+                        });
+                }
+            });
+        }
+    }
+
 }
-    // login: (req, res) => {
-    //     User.findOne({ email: req.body.email }, function (err, user) {
-    //         if (err || user == null) {
-    //             res.json({ status: false, messages: { login: "Email or password invalid." } })
-    //         }
-    //         else {
-    //             bcrypt.compare(req.body.password, user.password)
-    //                 .then((result) => {
-    //                     if (result) {
-    //                         req.session.user_id = user._id
-    //                         req.session.logged = true
-    //                         res.json({ status: true, messages: { success: "Login Sucessful" }, user_id: user._id });
-    //                     }
-    //                     else {
-    //                         res.json({ status: false, messages: { login: "Email or password invalid." } });
-    //                     }
-    //                 })
-    //                 .catch((err) => {
-    //                     res.json({ status: false, messages: { login: "Email or password invalid." } })
-    //                 });
-    //         }
-    //     })
-    // },  //done
+
 
     // checkStatus: (req, res) => {
     //     if (req.session.logged == true && req.session.user_id) {

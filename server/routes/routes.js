@@ -18,13 +18,14 @@ module.exports = (app) => {
         check('user_name').isLength({ min: 2 }).withMessage('Must be at least 2 characters'),
         check('email').isEmail().withMessage('Email is Invalid'),
         check('password').isLength({ min: 8 }).withMessage('Must be at least 8 characters'),
-    ],
-        Controllers.register);
+    ], Controllers.register);
+
+    app.post('/login', [check('email').isEmail()], Controllers.login);
+
 
     // app.get('/getOne/:id', Controllers.getOne);
 
     // //done
-    // app.post('/login', Controllers.login);
     // //done
 
     // app.post('/updatePersonalInfo/:UserID', Controllers.updatePersonalInfo);
