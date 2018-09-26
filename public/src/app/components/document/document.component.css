@@ -2,23 +2,11 @@
     min-height: 85vh;
 }
 
-.row{
-    height: 60px;
-    margin: 0px;
-    padding: auto;
-}
-
-.col:nth-child(1) {
-    /* background-color: green !important; */
-    margin: auto;
-    height: 100%;
-}
-
-.col:nth-child(1) .input-field input{
+.input-field input{
     border-radius: 5px !important;
     height: 25px !important;
+    padding-left: 10px;
 }
-
-.col button, .col p{
-    margin-top: 10px;
+.sidenav-trigger{
+    display: block !important;
 }

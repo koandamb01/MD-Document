@@ -40,7 +40,6 @@ module.exports = {
                 }
                 else {
                     req.body.password = hash_pw;
-
                     sql = 'INSERT INTO users SET ?';
                     let query = db.query(sql, req.body, (err, result) => {
                         if (err) {
@@ -110,7 +109,7 @@ module.exports = {
         });
     },
 
-    updatePersonalInfo(req, res) {
+    updatePersonalInfo: (req, res) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             let messages = {}
@@ -133,7 +132,7 @@ module.exports = {
         }
     },
 
-    updatePassword(req, res) {
+    updatePassword: (req, res) => {
         console.log("body: ", req.body, "id: ", req.params.userID);
 
         let data = { id: req.params.userID };
@@ -176,6 +175,61 @@ module.exports = {
                     .catch((err) => {
                         res.json({ status: false, messages: { old_password: "Old Password missmatch" } });
                     });
+            }
+        });
+    },
+
+
+    // create a new document
+    newDocument: (req, res) => {
+        let data = { title: "untitled document", content: "start typing here" };
+        sql = 'INSERT INTO documents SET ?'
+        let query = db.query(sql, data, (err, result) => {
+            if (err) {
+                res.json({ status: false, messages: { error: err } });
+            }
+            else {
+                // get the ID the record that was just inserted
+                db.query("SELECT LAST_INSERT_ID()", (err, data) => {
+                    var document_id = data[0]['LAST_INSERT_ID()'];
+                    let ids = { user_id: req.params.userID, document_id: document_id };
+                    // now insert both user id and document in the many table
+                    sql = 'INSERT INTO users_documents SET ?'
+                    let query = db.query(sql, ids, (err, result) => {
+                        if (err) {
+                            res.json({ status: false, messages: { error: err } });
+                        }
+                        else {
+                            res.json({ status: true, messages: { success: "Document successfully Create!" }, document_id: document_id })
+                        }
+                    });
+                });
+            }
+        });
+    },
+
+    // Get one document
+    getOneDocument: (req, res) => {
+        sql = `SELECT * FROM documents WHERE id = ${req.params.docID}`;
+        let query = db.query(sql, (err, row) => {
+            if (err) {
+                res.json({ status: false });
+            }
+            else {
+                res.json({ status: true, document: row[0] })
+            }
+        });
+    },
+
+    // update document title
+    updateDocumentTitle: (req, res) => {
+        sql = `UPDATE documents SET ? WHERE id = ${req.params.docID}`;
+        let query = db.query(sql, req.body, (err, result) => {
+            if (err) {
+                res.json({ status: false, messages: err });
+            }
+            else {
+                res.json({ status: true, messages: { success: "Document Title successfully Updated!" } })
             }
         });
     }

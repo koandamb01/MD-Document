@@ -1,23 +1,18 @@
 <!-- Create the editor container -->
-<div class="row">
-  <div class="col s2">
-    <div class="input-field">
-      <input type="text" name="first_name" value="" value="Final essay">
-    </div>
+<nav>
+  <div class="nav-wrapper blue">
+    <a href="#" data-target="slide-out" class="brand-logo right sidenav-trigger"><i class="material-icons">menu</i></a>
+    <ul id="nav-mobile" class="left hide-on-med-and-down">
+      <li>
+        <div class="input-field">
+          <input class="white-text" type="text" [(ngModel)]="document.title">
+        </div>
+      </li>
+      <li><a (click)="updateTitle()">Update</a></li>
+      <li><a><span class="white-text" *ngIf="messages.success">{{ messages.success }}</span></a></li>
+    </ul>
   </div>
-
-  <div class="col s1">
-    <button class="waves-effect waves-light btn-small blue" type="submit">
-      <i class="material-icons right">update</i>save
-    </button>
-  </div>
-
-  <div class="col s9">
-    <p class="right">
-      <a href="#" data-target="slide-out" class="sidenav-trigger"><i class="material-icons">menu</i></a>
-    </p>
-  </div>
-</div>
+</nav>
 
 <ul id="slide-out" class="sidenav">
   <li>
@@ -26,9 +21,14 @@
         <img src="../../../assets/images/village.jpg">
       </div>
       <a href="#user"><img class="circle" src="../../../assets/images/Naruto.png"></a>
-      <a href="#name"><span class="white-text name">Naruto Uzumaki</span></a>
-      <a href="#email"><span class="white-text email">jdandturk@gmail.com</span></a>
+      <a href="#name"><span class="white-text name">{{ user.first_name }} {{ user.last_name}}</span></a>
+      <a href="#email"><span class="white-text email">{{ user.email }}</span></a>
     </div>
+  </li>
+  <div class="divider"></div>
+  <li class="text-center">
+    <a style="cursor: pointer;" (click)="logout()" data-position="bottom" data-tooltip="Logout">
+      <i class="material-icons red-text">logout</i>Logout</a>
   </li>
   <div class="divider"></div>
   <br>
@@ -73,9 +73,10 @@
   </div>
 </ul>
 
+<!-- {{ document | json }} -->
+<div id="editor"></div>
 
-<div id="editor">
-  <p>Hello World!</p>
-  <p>Some initial <strong>bold</strong> text</p>
-  <p><br></p>
-</div>
+
+
+
+<!-- <input class="white-text" type="text" [ngModel]="document.title" (ngModelChange)="test($event)"> -->

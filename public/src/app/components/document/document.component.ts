@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { HttpService } from '../../http.service';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 
 @Component({
   selector: 'app-document',
@@ -7,9 +9,83 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DocumentComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    private _httpService: HttpService,
+    private _route: ActivatedRoute,
+    private _router: Router) { }
+
+  // variable
+  user: any;
+  user_id: any;
+  docID: any
+  document: any;
+  messages: any;
 
   ngOnInit() {
+    this.user = { first_name: "", last_name: "", user_name: "", email: "" };
+    this.document = { title: "", content: "" };
+    this.messages = { title: "" };
+    this.getDocID();
+    this.getUserID();
+    this.getDocument();
+    this.getUserInfo();
+  }
+
+  getUserID() {
+    this.user_id = localStorage.getItem('access_token');
+  }
+
+  test(e) {
+    console.log("changing...: ", e);
+  }
+  // get the user information
+  getUserInfo() {
+    console.log("user id: ", this.user_id);
+    let obs = this._httpService.getOne(this.user_id);
+    obs.subscribe(response => {
+      if (response['status'] == false) {
+        this.messages = response['messages'];
+      }
+      else {
+        this.user = response['user'];
+        console.log("user: ", this.user);
+      }
+    });
+  }
+
+  // reset all messages
+  resetMessages() { this.messages = { title: "" }; }
+
+  // get the document id from the URL ROUTE
+  getDocID() {
+    this._route.params.subscribe((params: Params) => {
+      this.docID = params['id'];
+    });
+  }
+
+  // get the document
+  getDocument() {
+    let obs = this._httpService.getOneDocument(this.docID);
+    obs.subscribe(response => {
+      if (response['status'] == true) {
+        this.document = response['document'];
+      }
+    });
+  }
+
+
+
+  updateTitle() {
+    let obs = this._httpService.updateDocumentTitle(this.docID, { title: this.document.title });
+    obs.subscribe(response => {
+      if (response['status'] == false) {
+        this.messages = response['messages'];
+      }
+      else {
+        this.messages = response['messages'];
+        setTimeout(() => { this.resetMessages() }, 2000);
+      }
+    });
   }
 
 }

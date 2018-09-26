@@ -87,4 +87,17 @@ export class ProfileComponent implements OnInit {
       })
     }
   }
+
+  // create a new document
+  newDocument() {
+    let obs = this._httpService.createDocument(this.user_id);
+    obs.subscribe(response => {
+      if (response['status'] == false) {
+        this.messages = response['messages'];
+      }
+      else {
+        this._router.navigate(['/document/' + response['document_id'] + '/edit']);
+      }
+    });
+  }
 }

@@ -41,4 +41,18 @@ export class HttpService {
     let token = localStorage.getItem('access_token');
     if (token) { return true; } else { return false; }
   }
+
+  // create a new document
+  createDocument(userID) {
+    return this._http.get('newDocument/' + userID);
+  }
+
+  // get one document
+  getOneDocument(docID) {
+    return this._http.get('/getonedocument/' + docID);
+  }
+  // update document title
+  updateDocumentTitle(docID, data) {
+    return this._http.put('/updatedocumentTitle/' + docID, data);
+  }
 }

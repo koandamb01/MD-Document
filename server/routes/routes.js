@@ -24,11 +24,14 @@ module.exports = (app) => {
 
     app.post('/updatePassword/:userID', Controllers.updatePassword);
 
-    // app.post('/newDocument/:UserID', Controllers.newDocument);
-    // //done
+    app.get('/newDocument/:userID', Controllers.newDocument);
+
+    app.put('/updatedocumentTitle/:docID', Controllers.updateDocumentTitle);
+
+    app.get('/getonedocument/:docID', Controllers.getOneDocument);
+
     // app.delete('/deleteDocument/:DocId', Controllers.deleteDocument);
     // //done
-    // app.put('/updateTitle/:DocId', Controllers.updateTitle);
     // //use socket to update document need fix
     // app.put('/addUserToDocument/:DocID', Controllers.addUserToDocument);
     // //done

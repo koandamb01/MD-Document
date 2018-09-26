@@ -7,9 +7,11 @@ import { NotfoundComponent } from './components/notfound/notfound.component';
 import { LoginComponent } from './components/login/login.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { RegisterComponent } from './components/register/register.component';
+import { DocumentComponent } from './components/document/document.component';
 
 const routes: Routes = [
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
+  { path: 'document/:id/edit', component: DocumentComponent, canActivate: [AuthGuard] },
   { path: '', component: LoginComponent },
   { path: 'signin', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
