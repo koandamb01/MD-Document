@@ -24,18 +24,6 @@
     <span class="blue-text" *ngIf="messages.success">{{ messages.success }}</span>
     <form (submit)="UpdatePersonalInfo()">
       <div class="input-field">
-<<<<<<< HEAD
-        <input type="text" name="first_name" >
-      </div>
-      <div class="input-field">
-        <input type="text" name="last_name" >
-      </div>
-      <div class="input-field">
-        <input type="text" name="user_name" >
-      </div>
-      <div class="input-field">
-        <input type="email" name="email">
-=======
         <input type="text" name="first_name" [(ngModel)]="user.first_name">
         <span class="red-text left" *ngIf="messages.first_name">{{ messages.first_name }}</span>
       </div>
@@ -50,7 +38,6 @@
       <div class="input-field">
         <input type="email" name="email" [(ngModel)]="user.email">
         <span class="red-text left" *ngIf="messages.email">{{ messages.email }}</span>
->>>>>>> ec0aa794a1fc8058918f2f4695d08e8e55641b67
       </div>
       <button class="waves-effect waves-light btn-small right grey darken-3" type="submit">
         <i class="material-icons right">update</i>Update
@@ -64,7 +51,7 @@
         <span class="red-text left" *ngIf="messages.old_password">{{ messages.old_password }}</span>
       </div>
       <div class="input-field">
-        <input placeholder="New Password" type="password" name="password" [(ngModel)]="passwordInfo.password">
+        <input placeholder="New Password" type="password" name="new_password" [(ngModel)]="passwordInfo.new_password">
         <span class="red-text left" *ngIf="messages.password">{{ messages.password }}</span>
       </div>
       <div class="input-field">
@@ -86,7 +73,8 @@
       </div>
     </div>
     <div class="docment">
-      <img (click)="newDocument()" style="cursor: pointer" src="https://ssl.gstatic.com/docs/templates/thumbnails/docs-blank_1.png" alt="">
+      <img (click)="newDocument()" style="cursor: pointer" src="https://ssl.gstatic.com/docs/templates/thumbnails/docs-blank_1.png"
+        alt="">
       <span class="white-text">Blank</span>
     </div>
     <div class="docment">

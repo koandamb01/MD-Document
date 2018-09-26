@@ -26,6 +26,7 @@ export class RegisterComponent implements OnInit {
     this.newUser = { first_name: "", last_name: "", email: "", user_name: "", password: "" };
     this.messages = { success: "", first_name: "", last_name: "", email: "", user_name: "", password: "", confirm_password: "" };
   }
+
   register() {
     if (this.newUser.password == this.confirm_password) {
       let observable = this._httpService.register(this.newUser);
@@ -35,6 +36,7 @@ export class RegisterComponent implements OnInit {
         }
         else {
           this.messages = response['messages'];
+          localStorage.setItem('access_token', response['user_id']);
           setTimeout(() => { this.goProfile() }, 2000);
         }
       });

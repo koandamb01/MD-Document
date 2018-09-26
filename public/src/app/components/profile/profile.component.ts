@@ -67,14 +67,24 @@ export class ProfileComponent implements OnInit {
     })
   }
 
-
+  // updated password
   updatePassword() {
-    if (this.passwordInfo.password != this.passwordInfo.confirm_password) {
+    console.log("userID: ", this.user_id);
+    if (this.passwordInfo.new_password != this.passwordInfo.confirm_password) {
       this.messages['status'] = false;
       this.messages['confirm_password'] = "Missmatch password";
     }
     else {
-
+      let obs = this._httpService.updatePassword(this.user_id, { old_password: this.passwordInfo.old_password, new_password: this.passwordInfo.new_password });
+      obs.subscribe(response => {
+        if (response['status'] == false) {
+          this.messages = response['messages'];
+        }
+        else {
+          this.messages = response['messages'];
+          setTimeout(() => { this.ngOnInit() }, 2000);
+        }
+      })
     }
   }
 }

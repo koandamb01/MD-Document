@@ -47,16 +47,15 @@ module.exports = {
                             console.log("query error: ", err);
                         }
                         else {
-                            console.log('result: ', result);
-                            req.session.user_id = result.id;
-                            res.json({ status: true, messages: { success: "User successfully Register!" }, user: result })
+                            // get the ID the record that was just inserted
+                            db.query("SELECT LAST_INSERT_ID()", (err, data) => {
+                                req.session.user_id = data[0]['LAST_INSERT_ID()'];
+                                res.json({ status: true, messages: { success: "User successfully Register!" }, user_id: data[0]['LAST_INSERT_ID()'] })
+                            });
                         }
                     });
-
-                    console.log("query: ", query);
-
                 }
-            })
+            });
         }
     },
 
@@ -76,13 +75,12 @@ module.exports = {
                     res.json({ status: false, messages: { login: "Email or password invalid." } });
                 }
                 else {
-                    console.log("user: ", user);
                     bcrypt.compare(req.body.password, user[0].password)
                         .then((result) => {
                             if (result) {
-                                req.session.user_id = user.id
+                                req.session.user_id = user[0].id
                                 req.session.logged = true
-                                res.json({ status: true, messages: { success: "Login Sucessful" }, user_id: user.id });
+                                res.json({ status: true, messages: { success: "Login Sucessful" }, user_id: user[0].id });
                             }
                             else {
                                 res.json({ status: false, messages: { login: "Email or password invalid." } });
@@ -94,9 +92,95 @@ module.exports = {
                 }
             });
         }
-    }
+    },
 
+    getOne: (req, res) => {
+        let data = { id: req.params.userID };
+        sql = 'SELECT first_name, last_name, user_name, email FROM users WHERE ?';
+        db.query(sql, data, (err, user) => {
+            if (err) {
+                res.json({ status: false, messages: "sql Error" });
+            }
+            else if (user.length == 0) {
+                res.json({ status: false, messages: "sql Error" });
+            }
+            else {
+                res.json({ status: true, user: user[0] });
+            }
+        });
+    },
+
+    updatePersonalInfo(req, res) {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            let messages = {}
+            var err = errors.mapped({ onlyFirstError: false });
+            for (let key in err) {
+                messages[key] = err[key].msg;
+            }
+            res.json({ status: false, messages: messages });
+        }
+        else {
+            sql = `UPDATE users SET ? WHERE id = ${req.params.userID}`;
+            db.query(sql, req.body, (err, row) => {
+                if (err) {
+                    res.json({ status: false, messages: "MySQL error" });
+                }
+                else {
+                    res.json({ status: true, messages: { success: "Personal Info successfully Updated!" } })
+                }
+            });
+        }
+    },
+
+    updatePassword(req, res) {
+        console.log("body: ", req.body, "id: ", req.params.userID);
+
+        let data = { id: req.params.userID };
+        sql = 'SELECT * FROM users WHERE ?';
+        db.query(sql, data, (err, user) => {
+            if (err) {
+                res.json({ status: false, messages: { password: "1 Password missmatch" } });
+            }
+            else if (user.length == 0) {
+                res.json({ status: false, messages: { password: "2 Password missmatch" } });
+            }
+            else {
+                console.log("user row: ", user[0]);
+                bcrypt.compare(req.body.old_password, user[0].password)
+                    .then((result) => {
+                        if (result) {
+                            // hash new password
+                            bcrypt.hash(req.body.new_password, 10).then((hash_pw, err) => {
+                                if (err) {
+                                    res.json({ status: false, messages: { server: "Bcrypt is not working" }, err: err })
+                                }
+                                else {
+                                    let tempData = { password: hash_pw };
+                                    sql = `UPDATE users SET ? WHERE id = ${req.params.userID}`;
+                                    db.query(sql, tempData, (err, row) => {
+                                        if (err) {
+                                            res.json({ status: false, messages: "MySQL error" });
+                                        }
+                                        else {
+                                            res.json({ status: true, messages: { success: "Password successfully Updated!" } })
+                                        }
+                                    });
+                                }
+                            })
+                        }
+                        else {
+                            res.json({ status: false, messages: { old_password: "Old Password missmatch" } });
+                        }
+                    })
+                    .catch((err) => {
+                        res.json({ status: false, messages: { old_password: "Old Password missmatch" } });
+                    });
+            }
+        });
+    }
 }
+
 
 
     // checkStatus: (req, res) => {

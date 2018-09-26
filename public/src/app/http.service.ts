@@ -33,12 +33,12 @@ export class HttpService {
     return this._http.post('/updatePersonalInfo/' + userID, userInfo);
   }
 
-
-
+  updatePassword(userID, userInfo) {
+    return this._http.post('/updatePassword/' + userID, userInfo);
+  }
 
   isAuthenticated() {
     let token = localStorage.getItem('access_token');
-    console.log("Token: ", token);
     if (token) { return true; } else { return false; }
   }
 }
