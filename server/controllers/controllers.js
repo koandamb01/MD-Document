@@ -6,7 +6,8 @@ const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 const db = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: 'root'
+    password: 'root',
+    database: 'md_document',
 });
 
 db.connect((err) => {
@@ -26,10 +27,38 @@ module.exports = {
         const errors = validationResult(req);
 
         if (!errors.isEmpty()) {
-            console.log("ERRORS: ", errors);
+            let messages = {}
+            var err = errors.mapped({ onlyFirstError: false });
+            for (let key in err) {
+                messages[key] = err[key].msg;
+            }
+            res.json({ status: false, messages: messages });
         }
+        else {
 
-    },  //done
+            bcrypt.hash(req.body.password, 10).then((hash_pw, err) => {
+                if (err) {
+                    res.json({ status: false, messages: { server: "Bcrypt is not working" }, err: err })
+                }
+                else {
+                    req.body.password = hash_pw;
+
+                    sql = 'INSERT INTO users SET ?';
+                    let query = db.query(sql, req.body, (err, result) => {
+                        if (err) {
+                            console.log("query error: ", err);
+                        }
+                        else {
+                            console.log('result: ', result);
+                            req.session.user_id = result.id;
+                            res.json({ status: true, messages: { success: "User successfully Register!" }, user: result })
+                        }
+                    });
+
+                }
+            })
+        }
+    },
 
 }
     // login: (req, res) => {

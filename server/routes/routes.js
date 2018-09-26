@@ -16,8 +16,8 @@ module.exports = (app) => {
         check('first_name').isLength({ min: 2 }).withMessage('Must be at least 2 characters'),
         check('last_name').isLength({ min: 2 }).withMessage('Must be at least 2 characters'),
         check('user_name').isLength({ min: 2 }).withMessage('Must be at least 2 characters'),
-        check('email').isEmail(),
-        check('password').isLength({ min: 8 })
+        check('email').isEmail().withMessage('Email is Invalid'),
+        check('password').isLength({ min: 8 }).withMessage('Must be at least 8 characters'),
     ],
         Controllers.register);
 
