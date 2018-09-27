@@ -93,6 +93,13 @@ module.exports = {
         }
     },
 
+    logout: (req, res) => {
+        console.log("before: ", req.session)
+        req.session.destroy();
+        console.log("after: ", req.session);
+        res.json({ status: true, messages: { success: "You are now logged out!" } });
+    },
+
     getOne: (req, res) => {
         let data = { id: req.params.userID };
         sql = 'SELECT first_name, last_name, user_name, email FROM users WHERE ?';
@@ -235,7 +242,7 @@ module.exports = {
     },
 
     //adding participants
-    addParticipants: (req,res) => {
+    addParticipants: (req, res) => {
         sql = 'SELECT id FROM users WHERE ?';
         let query = db.query(sql, req.body, (err, target_user) => {
             if (err) {
@@ -248,13 +255,13 @@ module.exports = {
             else {
                 let sql = `SELECT * FROM users_documents WHERE user_id = ${target_user[0].id} and document_id = ${req.params.docID}`;
                 let query = db.query(sql, (err, check) => {
-                    if (err){
+                    if (err) {
                         res.json({ status: false, messages: { error: err } });
                     }
-                    else if (check.length > 0){
-                        res.json({ status: false, messages: "User is already part of the document"})
+                    else if (check.length > 0) {
+                        res.json({ status: false, messages: "User is already part of the document" })
                     }
-                    else{
+                    else {
                         let ids = { user_id: target_user[0].id, document_id: req.params.docID };
                         // now insert both user id and document in the many table
                         sql = 'INSERT INTO users_documents SET ?'
@@ -267,30 +274,30 @@ module.exports = {
                             }
                         });
                     }
-                })   
+                })
             }
         });
     },
 
     removeParticipants: (req, res) => {
-        console.log("###########",req.params.killer, req.session.user_id)
-        if(req.session.user_id != req.params.killer){
-            res.json({ status: false, messages: "You "})
+        console.log("###########", req.params.killer, req.session.user_id)
+        if (req.session.user_id != req.params.killer) {
+            res.json({ status: false, messages: "You " })
         }
-        else{
-            sql=`Delete from users_documents where user_id = ${req.params.target} AND document_id = ${req.params.docID}`;
+        else {
+            sql = `Delete from users_documents where user_id = ${req.params.target} AND document_id = ${req.params.docID}`;
             let query = db.query(sql, (err, users) => {
-                if (err){
-                    res.json({status:false, message: err})
+                if (err) {
+                    res.json({ status: false, message: err })
                 }
-                else{
-                    res.json({status: true, messages: "User successfully removed from participant"})
+                else {
+                    res.json({ status: true, messages: "User successfully removed from participant" })
                 }
             })
         }
     },
 
-    getParticipants: (req,res) => {
+    getParticipants: (req, res) => {
         let data = { document_id: req.params.docID };
         sql = `select users.id, first_name, last_name, email, user_name from users left join users_documents ON users_documents.user_id = users.id left join documents ON documents.id = users_documents.document_id where documents.id = ${req.params.docID};`;
         let query = db.query(sql, (err, users) => {
@@ -302,10 +309,24 @@ module.exports = {
             }
             //validation here?
             else {
-                res.json({status: true, messages: users})
+                res.json({ status: true, messages: users })
             }
         })
     },
+
+
+    // update document content on socket
+    saveDocument: (document) => {
+        sql = `UPDATE documents SET ? WHERE id = ${document.document_id}`;
+        db.query(sql, { content: document.content }, (err, result) => {
+            if (err) {
+                return { status: false, messages: "MySQL error" };
+            }
+            else {
+                return { status: true, messages: { success: "Personal Info successfully Updated!" } };
+            }
+        });
+    }
 }
 
 

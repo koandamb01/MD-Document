@@ -10,3 +10,7 @@
 .sidenav-trigger{
     display: block !important;
 }
+
+ul li:nth-child(1){
+    padding-left: 10px;
+}

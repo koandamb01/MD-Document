@@ -13,6 +13,8 @@ module.exports = (app) => {
 
     app.post('/login', [check('email').isEmail()], Controllers.login);
 
+    app.get('/logout', Controllers.logout);
+
     app.get('/getOne/:userID', Controllers.getOne);
 
     app.post('/updatePersonalInfo/:userID', [
@@ -33,8 +35,10 @@ module.exports = (app) => {
     app.post('/addParticipants/:docID', Controllers.addParticipants);
 
     app.get('/getParticipants/:docID', Controllers.getParticipants)
-    
+
     app.delete('/removeParticipants/:target/:killer/:docID', Controllers.removeParticipants)
+
+
     // app.delete('/deleteDocument/:DocId', Controllers.deleteDocument);
     // //done
     // //use socket to update document need fix

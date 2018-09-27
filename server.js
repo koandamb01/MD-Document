@@ -33,11 +33,11 @@ io.on('connection', function (socket) {
     console.log('User connected');
     socket.emit('connected', { response: 'You are connected!' });
 
-    socket.on('saveDocument', function (data) {
-        console.log(data);
-        io.emit('saveDocumentDone', { message: "Document received" });
-    });
+    socket.on('saveDocument', (document) => {
+        Controllers.saveDocument(document);
+        io.emit('saveDocumentDone', { response: 'Doument updated!' });
 
+    });
 
     socket.on('disconnect', function () {
         console.log('User disconnected');

@@ -21,6 +21,10 @@ export class HttpService {
     return this._http.post('/login', user);
   }
 
+  logout() {
+    return this._http.get('/logout');
+  }
+
   checkStatus() {
     return this._http.get('/checkStatus');
   }
@@ -57,18 +61,19 @@ export class HttpService {
   }
 
   //adding participants to a certain document
-  addParticipants(data){
-    return this._http.post('/addParticipants/'+data.docID, data.email)
+  addParticipants(data) {
+    return this._http.post('/addParticipants/' + data.docID, data.email)
   }
 
-  getParticipants(data){
-    return this._http.get('/getParticipants/'+data)
+  getParticipants(data) {
+    return this._http.get('/getParticipants/' + data)
   }
 
-  removeParticipants(data){
+  removeParticipants(data) {
     console.log(data)
-    return this._http.delete('/removeParticipants/'+data.target + '/' +data.killer + '/'+data.document)
+    return this._http.delete('/removeParticipants/' + data.target + '/' + data.killer + '/' + data.document)
   }
+
 
 
 }

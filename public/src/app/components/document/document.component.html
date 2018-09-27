@@ -4,6 +4,9 @@
     <a href="#" data-target="slide-out" class="brand-logo right sidenav-trigger"><i class="material-icons">menu</i></a>
     <ul id="nav-mobile" class="left hide-on-med-and-down">
       <li>
+        <a [routerLink]="[ '/profile']"><i class="material-icons" style="cursor: pointer;">arrow_back</i></a>
+      </li>
+      <li>
         <div class="input-field">
           <input class="white-text" type="text" [(ngModel)]="document.title">
         </div>
@@ -26,14 +29,13 @@
     </div>
   </li>
   <div class="divider"></div>
-  <li class="text-center">
-    <a style="cursor: pointer;" (click)="logout()" data-position="bottom" data-tooltip="Logout">
-      <i class="material-icons red-text">logout</i>Logout</a>
+  <li style="text-align: center;">
+    <a style="cursor: pointer;" class="red-text" (click)="logout()">Logout</a>
   </li>
   <!-- adding users by David -->
   <form (submit)="addParticipants()">
     <input [(ngModel)]="addingParticipants.email" ngModel name="email" type="email" placeholder="Enter Their Email">
-    <button>Add</button>
+    <a class="waves-effect waves-light btn-small blue center">Send</a>
   </form>
   <!--  -->
   <div class="divider"></div>
@@ -45,44 +47,18 @@
       </li>
       <div style="height: 300px; overflow: scroll;">
         <li class="collection-item" *ngFor="let user of participants; index as i">
-          <div><span *ngIf="i == 0">Owner</span>{{user.user_name}} ({{user.first_name}} {{user.last_name}})<a *ngIf="participants[0].id == user_id && user.id != user_id"(click)="removeParticipants(user.id)" class="secondary-content" style="cursor:pointer;"><i class="material-icons red-text">delete</i></a></div>
+          <div><i class="fas fa-crown orange-text" *ngIf="i == 0"></i> {{user.user_name}} ({{user.first_name}}
+            {{user.last_name}})<a *ngIf="participants[0].id == user_id && user.id != user_id" (click)="removeParticipants(user.id)"
+              class="secondary-content" style="cursor:pointer;"><i class="material-icons red-text">delete</i></a></div>
         </li>
-        
-        <!-- <li class="collection-item">
-          <div>Mousa<a href="#!" class="secondary-content"><i class="material-icons red-text">delete</i></a></div>
-        </li>
-        <li class="collection-item">
-          <div>Momo<a href="#!" class="secondary-content"><i class="material-icons red-text">delete</i></a></div>
-        </li>
-        <li class="collection-item">
-          <div>Deck<a href="#!" class="secondary-content"><i class="material-icons red-text">delete</i></a></div>
-        </li>
-        <li class="collection-item">
-          <div>Momo<a href="#!" class="secondary-content"><i class="material-icons red-text">delete</i></a></div>
-        </li>
-        <li class="collection-item">
-          <div>Deck<a href="#!" class="secondary-content"><i class="material-icons red-text">delete</i></a></div>
-        </li>
-        <li class="collection-item">
-          <div>Momo<a href="#!" class="secondary-content"><i class="material-icons red-text">delete</i></a></div>
-        </li>
-        <li class="collection-item">
-          <div>Deck<a href="#!" class="secondary-content"><i class="material-icons red-text">delete</i></a></div>
-        </li>
-        <li class="collection-item">
-          <div>Momo<a href="#!" class="secondary-content"><i class="material-icons red-text">delete</i></a></div>
-        </li>
-        <li class="collection-item">
-          <div>Deck<a href="#!" class="secondary-content"><i class="material-icons red-text">delete</i></a></div>
-        </li> -->
       </div>
     </ul>
   </div>
 </ul>
 
 <!-- {{ document | json }} -->
-<div id="editor" (input)="saveDocument($event)">
-  {{ document.content }}
+<div id="editor" (input)="onTyping($event)">
+  <div [innerHTML]="document.content"></div>
 </div>
 
 
