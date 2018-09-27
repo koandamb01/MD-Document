@@ -19,7 +19,7 @@ export class ProfileComponent implements OnInit {
   user_id: any;
   messages: any;
   passwordInfo: any;
-  documentList=[];
+  documentList = [];
   ngOnInit() {
     this.user = { first_name: "", last_name: "", user_name: "", email: "" };
     this.passwordInfo = { old_password: "", password: "", confirm_password: "" };
@@ -31,7 +31,12 @@ export class ProfileComponent implements OnInit {
 
   logout() {
     localStorage.removeItem('access_token');
-    this._router.navigate(['/']);
+    let obs = this._httpService.logout();
+
+    obs.subscribe(response => {
+      this.messages = response['messages'];
+      this._router.navigate(['/']);
+    });
   }
 
   goLogin() {
@@ -103,25 +108,29 @@ export class ProfileComponent implements OnInit {
     });
   }
 
-  grabDocument(){
+  grabDocument() {
     let obs = this._httpService.getDocument();
     obs.subscribe(response => {
       if (response['status'] == false) {
         this.messages = response['messages'];
       }
-      else if(response["messages"]=="No documents"){
+      else if (response["messages"] == "No documents") {
         console.log(response["messages"])
         console.log("grab")
       }
       else {
+<<<<<<< HEAD
         console.log("grab")
         this.documentList= response["messages"];
+=======
+        this.documentList = response["documents"];
+>>>>>>> ec5a4ded997cf7cfca578ff7890040c8eb8ece5a
         console.log(this.documentList);
       }
     });
   }
 
-  editDocument(id){
+  editDocument(id) {
     this._router.navigate(['/document/' + id + '/edit']);
   }
 }

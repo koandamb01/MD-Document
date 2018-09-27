@@ -35,8 +35,25 @@ io.on('connection', function (socket) {
     socket.emit('connected', { response: 'You are connected!' });
 
     socket.on('saveDocument', (document) => {
-        Controllers.saveDocument(document);
-        io.emit('saveDocumentDone', { response: 'Doument updated!' });
+        // Controllers.saveDocument(document, result);
+        sql = `UPDATE documents SET ? WHERE id = ${document.document_id}`;
+        Controllers.db.query(sql, { content: document.content }, (err, result) => {
+            if (err) {
+                return { status: false, messages: "MySQL error" };
+            }
+            else {
+                sql = `SELECT * FROM documents WHERE id = ${document.document_id}`;
+                let query = Controllers.db.query(sql, (err, row) => {
+                    if (err) {
+                        res.json({ status: false });
+                    }
+                    else {
+                        io.emit('saveDocumentDone', { status: true, messages: { success: "Saving..." }, document: row[0] });
+                    }
+                });
+            }
+        });
+
 
     });
 
