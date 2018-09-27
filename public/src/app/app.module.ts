@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { HttpService } from './http.service';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
+import { SocketIoModule, SocketIoConfig } from 'ng-socket-io';
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './components/login/login.component';
@@ -12,6 +13,8 @@ import { AppRoutingModule } from './/app-routing.module';
 import { LogregComponent } from './components/logreg/logreg.component';
 import { NotfoundComponent } from './components/notfound/notfound.component';
 import { DocumentComponent } from './components/document/document.component';
+
+const config: SocketIoConfig = { url: 'http://localhost:8000', options: {} };
 
 @NgModule({
   declarations: [
@@ -28,6 +31,7 @@ import { DocumentComponent } from './components/document/document.component';
     HttpClientModule,
     FormsModule,
     AppRoutingModule,
+    SocketIoModule.forRoot(config)
   ],
   providers: [HttpService],
   bootstrap: [AppComponent]
