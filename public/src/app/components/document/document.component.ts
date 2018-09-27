@@ -17,14 +17,11 @@ export class DocumentComponent implements OnInit {
     private _router: Router,
     private _chatService: ChatService) {
 
-    this.getDocID();
-    this.getUserID();
-    this.getDocument();
-    this.getUserInfo();
-
     this._chatService.onConnect().subscribe(data => { console.log(data); });
-    this._chatService.saveDocumentDone().subscribe(data => { console.log(data) });
-    // this.saveDocument();
+    this._chatService.saveDocumentDone().subscribe(response => {
+      this.messages = response['messages'];
+      this.document.content = response['document']['content'];
+    });
   }
 
   // variable
@@ -38,18 +35,23 @@ export class DocumentComponent implements OnInit {
   successMessage: any;
   participants = [];
   msg: any;
+  htmlContent: any;
 
   ngOnInit() {
     this.addingParticipants = { email: "" }
     this.user = { first_name: "", last_name: "", user_name: "", email: "" };
     this.messages = { title: "" };
+
+    this.getDocID();
+    this.getUserID();
+    this.getDocument();
+    this.getUserInfo();
+
   }
   removeParticipants(userId) {
     let obs = this._httpService.removeParticipants({ target: userId, killer: this.user_id, document: this.docID });
     obs.subscribe(response => {
-      console.log(response)
       if (response["status"]) {
-        console.log("Removed")
         this.getParticipants();
       }
       else {
@@ -63,7 +65,6 @@ export class DocumentComponent implements OnInit {
     obs.subscribe(response => {
       if (response["status"]) {
         this.participants = response["messages"];
-        console.log(this.participants);
       }
       else {
         this.errorMessage1 = response["messages"];
@@ -88,7 +89,6 @@ export class DocumentComponent implements OnInit {
   inviteParticipants() {
     let obs = this._httpService.inviteParticipants({ email: this.addingParticipants, docID: this.docID, documentTitle: document.title, user_name: this.user["user_name"] });
     obs.subscribe(response => {
-      console.log(response)
       if (response["status"]) {
         this.successMessage = response["messages"];
       }
@@ -105,17 +105,13 @@ export class DocumentComponent implements OnInit {
   }
 
   // save document content
-  onTyping(e) { this.document.content = e.target.innerHTML; }
-
-  saveDocument() {
-    setInterval(() => {
-      this._chatService.saveDocument({ document_id: this.docID, content: this.document.content });
-    }, 10000);
+  onTyping(e) {
+    this._chatService.saveDocument({ document_id: this.docID, content: this.document.content });
+    setTimeout(() => { this.resetMessages() }, 3000);
   }
 
   // get the user information
   getUserInfo() {
-    console.log("user id: ", this.user_id);
     let obs = this._httpService.getOne(this.user_id);
     obs.subscribe(response => {
       if (response['status'] == false) {
@@ -144,12 +140,9 @@ export class DocumentComponent implements OnInit {
       if (response['status'] == true) {
         this.document = response['document'];
         this.getParticipants();
-        console.log('document: ', this.document);
       }
     });
   }
-
-
 
   updateTitle() {
     let obs = this._httpService.updateDocumentTitle(this.docID, { title: this.document.title });

@@ -22,8 +22,7 @@ db.connect((err) => {
 });
 
 module.exports = {
-
-
+    db: db,
     // ######## REGISTRATION ######### //
     register: (req, res) => {
         const errors = validationResult(req);
@@ -361,20 +360,28 @@ module.exports = {
 
 
     // update document content on socket
-    saveDocument: (document) => {
-        sql = `UPDATE documents SET ? WHERE id = ${document.document_id}`;
-        db.query(sql, { content: document.content }, (err, result) => {
-            if (err) {
-                return { status: false, messages: "MySQL error" };
-            }
-            else {
-                return { status: true, messages: { success: "Personal Info successfully Updated!" } };
-            }
-        });
-    },
+    // saveDocument: (document, result) => {
+    //     sql = `UPDATE documents SET ? WHERE id = ${document.document_id}`;
+    //     db.query(sql, { content: document.content }, (err, result) => {
+    //         if (err) {
+    //             return { status: false, messages: "MySQL error" };
+    //         }
+    //         else {
+    //             sql = `SELECT * FROM documents WHERE id = ${document.document_id}`;
+    //             let query = db.query(sql, (err, row) => {
+    //                 if (err) {
+    //                     res.json({ status: false });
+    //                 }
+    //                 else {
+    //                     result = { status: true, document: row[0] }
+    //                 }
+    //             });
+    //         }
+    //     });
+    // },
 
     getDocument: (req, res) => {
-        sql = `select documents.id, title from documents left join users_documents ON users_documents.document_id = documents.id where users_documents.user_id = ${req.session.user_id}`;
+        sql = `SELECT documents.id, title from documents left join users_documents ON users_documents.document_id = documents.id where users_documents.user_id = ${req.session.user_id}`;
         let query = db.query(sql, (err, documents) => {
             if (err) {
                 res.json({ status: false, messages: err });
@@ -383,7 +390,7 @@ module.exports = {
                 res.json({ status: true, messages: "No documents" });
             }
             else {
-                res.json({ status: true, messages: documents })
+                res.json({ status: true, documents: documents });
             }
         })
     },

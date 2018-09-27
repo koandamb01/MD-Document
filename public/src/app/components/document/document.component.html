@@ -56,12 +56,12 @@
   </div>
 </ul>
 
-<!-- {{ document | json }} -->
-<div id="editor" (input)="onTyping($event)">
-  <div [innerHTML]="document.content"></div>
+<div class="row">
+  <div class="col s8">
+    <app-ngx-editor [placeholder]="'Enter text here...'" [spellcheck]="true" [(ngModel)]="document.content" (input)="onTyping($event)"></app-ngx-editor>
+  </div>
+
+  <div class="col s4">
+    <p>Chat here</p>
+  </div>
 </div>
-
-
-
-
-<!-- <input class="white-text" type="text" [ngModel]="document.title" (ngModelChange)="test($event)"> -->

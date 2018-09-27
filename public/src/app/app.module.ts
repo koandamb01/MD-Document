@@ -4,6 +4,7 @@ import { HttpService } from './http.service';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { SocketIoModule, SocketIoConfig } from 'ng-socket-io';
+import { NgxEditorModule } from 'ngx-editor';
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './components/login/login.component';
@@ -13,6 +14,7 @@ import { AppRoutingModule } from './/app-routing.module';
 import { LogregComponent } from './components/logreg/logreg.component';
 import { NotfoundComponent } from './components/notfound/notfound.component';
 import { DocumentComponent } from './components/document/document.component';
+import { TooltipModule } from 'ngx-bootstrap/tooltip';
 
 const config: SocketIoConfig = { url: 'http://localhost:8000', options: {} };
 
@@ -31,7 +33,9 @@ const config: SocketIoConfig = { url: 'http://localhost:8000', options: {} };
     HttpClientModule,
     FormsModule,
     AppRoutingModule,
-    SocketIoModule.forRoot(config)
+    SocketIoModule.forRoot(config),
+    NgxEditorModule,
+    TooltipModule.forRoot(),
   ],
   providers: [HttpService],
   bootstrap: [AppComponent]
