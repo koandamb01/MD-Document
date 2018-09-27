@@ -69,8 +69,13 @@ export class HttpService {
     return this._http.get('/getParticipants/' + data)
   }
 
+<<<<<<< HEAD
   removeParticipants(data) {
     return this._http.delete('/removeParticipants/' + data.target + '/' + data.killer + '/' + data.document)
+=======
+  removeParticipants(data){
+    return this._http.delete('/removeParticipants/'+data.target + '/' +data.killer + '/'+data.document)
+>>>>>>> 183fbe4c6d5c2b173c8740579cf12fbd61117a97
   }
 
   getDocument() {
