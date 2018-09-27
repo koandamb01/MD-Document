@@ -30,6 +30,12 @@
     <a style="cursor: pointer;" (click)="logout()" data-position="bottom" data-tooltip="Logout">
       <i class="material-icons red-text">logout</i>Logout</a>
   </li>
+  <!-- adding users by David -->
+  <form (submit)="addParticipants()">
+    <input [(ngModel)]="addingParticipants.email" ngModel name="email" type="email" placeholder="Enter Their Email">
+    <button>Add</button>
+  </form>
+  <!--  -->
   <div class="divider"></div>
   <br>
   <div class="col s2 profile-box">
@@ -38,10 +44,11 @@
         Participants
       </li>
       <div style="height: 300px; overflow: scroll;">
-        <li class="collection-item">
-          <div>Alvin<a href="#!" class="secondary-content"><i class="material-icons red-text">delete</i></a></div>
+        <li class="collection-item" *ngFor="let user of participants; index as i">
+          <div><span *ngIf="i == 0">Owner</span>{{user.user_name}} ({{user.first_name}} {{user.last_name}})<a *ngIf="participants[0].id == user_id && user.id != user_id"(click)="removeParticipants(user.id)" class="secondary-content" style="cursor:pointer;"><i class="material-icons red-text">delete</i></a></div>
         </li>
-        <li class="collection-item">
+        
+        <!-- <li class="collection-item">
           <div>Mousa<a href="#!" class="secondary-content"><i class="material-icons red-text">delete</i></a></div>
         </li>
         <li class="collection-item">
@@ -67,7 +74,7 @@
         </li>
         <li class="collection-item">
           <div>Deck<a href="#!" class="secondary-content"><i class="material-icons red-text">delete</i></a></div>
-        </li>
+        </li> -->
       </div>
     </ul>
   </div>

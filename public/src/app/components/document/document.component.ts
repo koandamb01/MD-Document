@@ -20,8 +20,13 @@ export class DocumentComponent implements OnInit {
   docID: any
   document: any;
   messages: any;
+  addingParticipants: any;
+  errorMessage1 : any;
+  successMessage: any;
+  participants= [];
 
   ngOnInit() {
+    this.addingParticipants = { email: "" }
     this.user = { first_name: "", last_name: "", user_name: "", email: "" };
     this.document = { title: "", content: "" };
     this.messages = { title: "" };
@@ -29,6 +34,46 @@ export class DocumentComponent implements OnInit {
     this.getUserID();
     this.getDocument();
     this.getUserInfo();
+  }
+  removeParticipants(userId){
+    let obs = this._httpService.removeParticipants({ target: userId , killer : this.user_id, document: this.docID });
+    obs.subscribe(response =>{
+      console.log( response )
+      if(response["status"]){
+        console.log("Removed")
+        this.getParticipants();
+      }
+      else{
+        this.errorMessage1 = response["messages"];
+      }
+    })
+  }
+
+  getParticipants(){
+    let obs = this._httpService.getParticipants(this.docID);
+    obs.subscribe(response =>{
+      if(response["status"]){
+        this.participants = response["messages"];
+        console.log(this.participants);
+      }
+      else{
+        this.errorMessage1 = response["messages"];
+      }
+    })
+  }
+
+  addParticipants(){
+    let obs = this._httpService.addParticipants({email: this.addingParticipants, docID:  this.docID});
+    obs.subscribe(response =>{
+      console.log( response )
+      if(response["status"]){
+        this.successMessage = response["messages"];
+        this.getParticipants();
+      }
+      else{
+        this.errorMessage1 = response["messages"];
+      }
+    })
   }
 
   getUserID() {
@@ -69,6 +114,7 @@ export class DocumentComponent implements OnInit {
     obs.subscribe(response => {
       if (response['status'] == true) {
         this.document = response['document'];
+        this.getParticipants();
       }
     });
   }

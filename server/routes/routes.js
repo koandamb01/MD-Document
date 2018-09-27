@@ -30,6 +30,11 @@ module.exports = (app) => {
 
     app.get('/getonedocument/:docID', Controllers.getOneDocument);
 
+    app.post('/addParticipants/:docID', Controllers.addParticipants);
+
+    app.get('/getParticipants/:docID', Controllers.getParticipants)
+    
+    app.delete('/removeParticipants/:target/:killer/:docID', Controllers.removeParticipants)
     // app.delete('/deleteDocument/:DocId', Controllers.deleteDocument);
     // //done
     // //use socket to update document need fix

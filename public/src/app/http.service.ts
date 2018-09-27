@@ -55,4 +55,20 @@ export class HttpService {
   updateDocumentTitle(docID, data) {
     return this._http.put('/updatedocumentTitle/' + docID, data);
   }
+
+  //adding participants to a certain document
+  addParticipants(data){
+    return this._http.post('/addParticipants/'+data.docID, data.email)
+  }
+
+  getParticipants(data){
+    return this._http.get('/getParticipants/'+data)
+  }
+
+  removeParticipants(data){
+    console.log(data)
+    return this._http.delete('/removeParticipants/'+data.target + '/' +data.killer + '/'+data.document)
+  }
+
+
 }
