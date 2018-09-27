@@ -71,32 +71,32 @@ export class DocumentComponent implements OnInit {
     })
   }
 
-  // addParticipants(){
-  //   let obs = this._httpService.addParticipants({email: this.addingParticipants, docID:  this.docID});
-  //   obs.subscribe(response =>{
-  //     console.log( response )
-  //     if(response["status"]){
-  //       this.successMessage = response["messages"];
-  //       this.getParticipants();
-  //     }
-  //     else{
-  //       this.errorMessage1 = response["messages"];
-  //     }
-  //   })
-  // }
-
-  inviteParticipants() {
-    let obs = this._httpService.inviteParticipants({ email: this.addingParticipants, docID: this.docID, documentTitle: document.title, user_name: this.user["user_name"] });
-    obs.subscribe(response => {
-      console.log(response)
-      if (response["status"]) {
+  addParticipants(){
+    let obs = this._httpService.addParticipants({email: this.addingParticipants, docID:  this.docID});
+    obs.subscribe(response =>{
+      console.log( response )
+      if(response["status"]){
         this.successMessage = response["messages"];
+        this.getParticipants();
       }
-      else {
+      else{
         this.errorMessage1 = response["messages"];
       }
     })
   }
+
+  // inviteParticipants() {
+  //   let obs = this._httpService.inviteParticipants({ email: this.addingParticipants, docID: this.docID, documentTitle: document.title, user_name: this.user["user_name"] });
+  //   obs.subscribe(response => {
+  //     console.log(response)
+  //     if (response["status"]) {
+  //       this.successMessage = response["messages"];
+  //     }
+  //     else {
+  //       this.errorMessage1 = response["messages"];
+  //     }
+  //   })
+  // }
 
 
   // get document ID

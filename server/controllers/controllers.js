@@ -80,8 +80,9 @@ module.exports = {
                     bcrypt.compare(req.body.password, user[0].password)
                         .then((result) => {
                             if (result) {
-                                req.session.user_id = user[0].id
-                                req.session.logged = true
+                                req.session.user_id = user[0].id;
+                                req.session.user_name = user[0].user_name;
+                                req.session.logged = true;
                                 res.json({ status: true, messages: { success: "Login Sucessful" }, user_id: user[0].id });
                             }
                             else {
@@ -244,47 +245,47 @@ module.exports = {
         });
     },
 
-    inviteParticipants: (req, res) => {
-        sql = 'SELECT * FROM users WHERE ?';
-        let query = db.query(sql, req.body.email, (err, user) => {
-            if (err) {
-                res.json({ status: false, messages: "Server Error, try again later" });
-            }
-            else if (user.length == 0) {
-                res.json({ status: false, messages: "Could not find any user that matches the email" });
-            }
-            else {
-                console.log(req.body)
-                console.log(req.body.email)
-                var transporter = nodemailer.createTransport({
-                    service: 'gmail',
-                    auth: {
-                        user: 'mddocument11@gmail.com',
-                        pass: 'codingdojo1'
-                    }
-                });
+    // inviteParticipants: (req, res) => {
+    //     sql = 'SELECT * FROM users WHERE ?';
+    //     let query = db.query(sql, req.body.email, (err, user) => {
+    //         if (err) {
+    //             res.json({ status: false, messages: "Server Error, try again later" });
+    //         }
+    //         else if (user.length == 0) {
+    //             res.json({ status: false, messages: "Could not find any user that matches the email" });
+    //         }
+    //         else {
+    //             console.log(req.body)
+    //             console.log(req.body.email)
+    //             var transporter = nodemailer.createTransport({
+    //                 service: 'gmail',
+    //                 auth: {
+    //                     user: 'mddocument11@gmail.com',
+    //                     pass: 'codingdojo1'
+    //                 }
+    //             });
 
-                var mailOptions = {
-                    from: 'mddocument11@gmail.com',
-                    to: req.body.email.email,
-                    subject: req.body.user_name + ' wants you as a participant to a MdDocument',
-                    text: req.body.user_name + ' would like to invite you to be a participant of the document. Click the link to accept your invitation.'
-                };
+    //             var mailOptions = {
+    //                 from: 'mddocument11@gmail.com',
+    //                 to: req.body.email.email,
+    //                 subject: req.body.user_name + ' wants you as a participant to a MdDocument',
+    //                 text: req.body.user_name + ' would like to invite you to be a participant of the document. Click the link to accept your invitation.'
+    //             };
 
-                console.log(mailOptions);
+    //             console.log(mailOptions);
 
-                transporter.sendMail(mailOptions, function (error, info) {
-                    if (error) {
-                        console.log(error);
-                    } else {
-                        console.log('Email sent: ' + info.response);
-                        res.json({ status: true, messages: "Invite Link Sent" })
-                    }
-                });
-            }
+    //             transporter.sendMail(mailOptions, function (error, info) {
+    //                 if (error) {
+    //                     console.log(error);
+    //                 } else {
+    //                     console.log('Email sent: ' + info.response);
+    //                     res.json({ status: true, messages: "Invite Link Sent" })
+    //                 }
+    //             });
+    //         }
 
-        })
-    },
+    //     })
+    // },
 
     //adding participants
     addParticipants: (req, res) => {
@@ -315,7 +316,32 @@ module.exports = {
                                 res.json({ status: false, messages: { error: err } });
                             }
                             else {
-                                res.json({ status: true, messages: { success: "Participant successfully added!" }, data: target_user[0].id })
+                                var transporter = nodemailer.createTransport({
+                                    service: 'gmail',
+                                    auth: {
+                                        user: 'mddocument11@gmail.com',
+                                        pass: 'codingdojo1'
+                                    }
+                                });
+                
+                                var mailOptions = {
+                                    from: 'mddocument11@gmail.com',
+                                    to: req.body.email,
+                                    subject: req.session.user_name + ' added you as a participant to a MdDocument',
+                                    text: req.session.user_name + ' added you to be a participant of the document. Let us know if this was a mistake'
+                                };
+                
+                                console.log(mailOptions);
+                
+                                transporter.sendMail(mailOptions, function (error, info) {
+                                    if (error) {
+                                        console.log(error);
+                                        res.json({ status:false, messages: "Email not sent but added on document"})
+                                    } else {
+                                        console.log('Email sent: ' + info.response);
+                                        res.json({ status: true, messages: { success: "Participant successfully added!" }, data: target_user[0].id })
+                                    }
+                                });
                             }
                         });
                     }

@@ -111,8 +111,10 @@ export class ProfileComponent implements OnInit {
       }
       else if(response["messages"]=="No documents"){
         console.log(response["messages"])
+        console.log("grab")
       }
       else {
+        console.log("grab")
         this.documentList= response["messages"];
         console.log(this.documentList);
       }

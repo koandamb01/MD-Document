@@ -33,9 +33,9 @@
     <a style="cursor: pointer;" class="red-text" (click)="logout()">Logout</a>
   </li>
   <!-- adding users by David -->
-  <form (submit)="inviteParticipants()">
+  <form (submit)="addParticipants()">
     <input [(ngModel)]="addingParticipants.email" ngModel name="email" type="email" placeholder="Enter Their Email">
-    <a class="waves-effect waves-light btn-small blue center">Send</a>
+    <button class="waves-effect waves-light btn-small blue center">Send</button>
   </form>
   <!--  -->
   <div class="divider"></div>
