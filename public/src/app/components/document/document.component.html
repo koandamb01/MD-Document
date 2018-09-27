@@ -74,7 +74,9 @@
 </ul>
 
 <!-- {{ document | json }} -->
-<div id="editor"></div>
+<div id="editor" (input)="saveDocument($event)">
+  {{ document.content }}
+</div>
 
 
 
