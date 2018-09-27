@@ -78,19 +78,19 @@
     </div>
     <div class="docment">
       <img src="https://ssl.gstatic.com/docs/templates/thumbnails/1XykI9TfWo4IoUqGLjQ-D8NIU4jZ1Ml9OI8-Euj5FrA0_400_3.png">
-      <span class="white-text">Blank</span>
+      <span class="white-text">Form</span>
     </div>
     <div class="docment">
       <img src="https://ssl.gstatic.com/docs/templates/thumbnails/1XykI9TfWo4IoUqGLjQ-D8NIU4jZ1Ml9OI8-Euj5FrA0_400_3.png">
-      <span class="white-text">Blank</span>
+      <span class="white-text">Resume</span>
     </div>
     <div class="docment">
       <img src="https://ssl.gstatic.com/docs/templates/thumbnails/1XykI9TfWo4IoUqGLjQ-D8NIU4jZ1Ml9OI8-Euj5FrA0_400_3.png">
-      <span class="white-text">Blank</span>
+      <span class="white-text">Portfolio</span>
     </div>
     <div class="docment">
       <img src="https://ssl.gstatic.com/docs/templates/thumbnails/1XykI9TfWo4IoUqGLjQ-D8NIU4jZ1Ml9OI8-Euj5FrA0_400_3.png">
-      <span class="white-text">Blank</span>
+      <span class="white-text">Project</span>
     </div>
   </div>
 </div>
@@ -98,72 +98,19 @@
 <div class="main-content">
   <div class="container">
     <div class="row">
-      <div class="col s2">
+      
+      <div *ngFor="let document of documentList" class="col s2">
         <div class="card">
           <div class="card-image">
-            <img src="https://ssl.gstatic.com/docs/templates/thumbnails/1XykI9TfWo4IoUqGLjQ-D8NIU4jZ1Ml9OI8-Euj5FrA0_400_3.png">
-            <span class="card-title">Card Title</span>
+            <img (click)="editDocument(document.id)" style="cursor:pointer;" src="https://ssl.gstatic.com/docs/templates/thumbnails/1XykI9TfWo4IoUqGLjQ-D8NIU4jZ1Ml9OI8-Euj5FrA0_400_3.png">
+            <span class="card-title"></span>
           </div>
           <div class="card-action">
-            <a href="#">Doc 1</a>
+            <a (click)="editDocument(document.id)" style="cursor:pointer;">{{document.title}}</a>
           </div>
         </div>
       </div>
-      <div class="col s2">
-        <div class="card">
-          <div class="card-image">
-            <img src="https://ssl.gstatic.com/docs/templates/thumbnails/1XykI9TfWo4IoUqGLjQ-D8NIU4jZ1Ml9OI8-Euj5FrA0_400_3.png">
-            <span class="card-title">Card Title</span>
-          </div>
-          <div class="card-action">
-            <a href="#">Doc 1</a>
-          </div>
-        </div>
-      </div>
-      <div class="col s2">
-        <div class="card">
-          <div class="card-image">
-            <img src="https://ssl.gstatic.com/docs/templates/thumbnails/1XykI9TfWo4IoUqGLjQ-D8NIU4jZ1Ml9OI8-Euj5FrA0_400_3.png">
-            <span class="card-title">Card Title</span>
-          </div>
-          <div class="card-action">
-            <a href="#">Doc 1</a>
-          </div>
-        </div>
-      </div>
-      <div class="col s2">
-        <div class="card">
-          <div class="card-image">
-            <img src="https://ssl.gstatic.com/docs/templates/thumbnails/1XykI9TfWo4IoUqGLjQ-D8NIU4jZ1Ml9OI8-Euj5FrA0_400_3.png">
-            <span class="card-title">Card Title</span>
-          </div>
-          <div class="card-action">
-            <a href="#">Doc 1</a>
-          </div>
-        </div>
-      </div>
-      <div class="col s2">
-        <div class="card">
-          <div class="card-image">
-            <img src="https://ssl.gstatic.com/docs/templates/thumbnails/1XykI9TfWo4IoUqGLjQ-D8NIU4jZ1Ml9OI8-Euj5FrA0_400_3.png">
-            <span class="card-title">Card Title</span>
-          </div>
-          <div class="card-action">
-            <a href="#">Doc 1</a>
-          </div>
-        </div>
-      </div>
-      <div class="col s2">
-        <div class="card">
-          <div class="card-image">
-            <img src="https://ssl.gstatic.com/docs/templates/thumbnails/1XykI9TfWo4IoUqGLjQ-D8NIU4jZ1Ml9OI8-Euj5FrA0_400_3.png">
-            <span class="card-title">Card Title</span>
-          </div>
-          <div class="card-action">
-            <a href="#">Doc 1</a>
-          </div>
-        </div>
-      </div>
+
     </div>
   </div>
 </div>

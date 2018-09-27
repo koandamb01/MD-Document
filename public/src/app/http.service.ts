@@ -66,9 +66,15 @@ export class HttpService {
   }
 
   removeParticipants(data){
-    console.log(data)
     return this._http.delete('/removeParticipants/'+data.target + '/' +data.killer + '/'+data.document)
   }
 
+  getDocument(){
+    return this._http.get('/getDocument')
+  }
+
+  inviteParticipants(data){
+    return this._http.post('/inviteParticipants', data)
+  }
 
 }

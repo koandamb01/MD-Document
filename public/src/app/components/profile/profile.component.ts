@@ -18,13 +18,15 @@ export class ProfileComponent implements OnInit {
   user: any;
   user_id: any;
   messages: any;
-  passwordInfo: any
+  passwordInfo: any;
+  documentList=[];
   ngOnInit() {
     this.user = { first_name: "", last_name: "", user_name: "", email: "" };
     this.passwordInfo = { old_password: "", password: "", confirm_password: "" };
     this.messages = { success: "", first_name: "", last_name: "", email: "", user_name: "", password: "", confirm_password: "" };
     this.getUserID();
     this.getUserInfo();
+    this.grabDocument();
   }
 
   logout() {
@@ -99,5 +101,25 @@ export class ProfileComponent implements OnInit {
         this._router.navigate(['/document/' + response['document_id'] + '/edit']);
       }
     });
+  }
+
+  grabDocument(){
+    let obs = this._httpService.getDocument();
+    obs.subscribe(response => {
+      if (response['status'] == false) {
+        this.messages = response['messages'];
+      }
+      else if(response["messages"]=="No documents"){
+        console.log(response["messages"])
+      }
+      else {
+        this.documentList= response["messages"];
+        console.log(this.documentList);
+      }
+    });
+  }
+
+  editDocument(id){
+    this._router.navigate(['/document/' + id + '/edit']);
   }
 }

@@ -6,6 +6,7 @@ var path = require('path');
 var app = express();
 const server = require('http').createServer(app);
 const Controllers = require('./server/controllers/controllers');
+var nodemailer = require('nodemailer');
 
 var session = require("express-session")
 app.set('trust proxy', 1)
@@ -43,7 +44,6 @@ io.on('connection', function (socket) {
         console.log('User disconnected');
     });
 });
-
 
 server.listen(8000, () => {
     console.log("Server is running in port 8000");

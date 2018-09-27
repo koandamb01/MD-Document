@@ -31,7 +31,7 @@
       <i class="material-icons red-text">logout</i>Logout</a>
   </li>
   <!-- adding users by David -->
-  <form (submit)="addParticipants()">
+  <form (submit)="inviteParticipants()">
     <input [(ngModel)]="addingParticipants.email" ngModel name="email" type="email" placeholder="Enter Their Email">
     <button>Add</button>
   </form>
@@ -47,34 +47,6 @@
         <li class="collection-item" *ngFor="let user of participants; index as i">
           <div><span *ngIf="i == 0">Owner</span>{{user.user_name}} ({{user.first_name}} {{user.last_name}})<a *ngIf="participants[0].id == user_id && user.id != user_id"(click)="removeParticipants(user.id)" class="secondary-content" style="cursor:pointer;"><i class="material-icons red-text">delete</i></a></div>
         </li>
-        
-        <!-- <li class="collection-item">
-          <div>Mousa<a href="#!" class="secondary-content"><i class="material-icons red-text">delete</i></a></div>
-        </li>
-        <li class="collection-item">
-          <div>Momo<a href="#!" class="secondary-content"><i class="material-icons red-text">delete</i></a></div>
-        </li>
-        <li class="collection-item">
-          <div>Deck<a href="#!" class="secondary-content"><i class="material-icons red-text">delete</i></a></div>
-        </li>
-        <li class="collection-item">
-          <div>Momo<a href="#!" class="secondary-content"><i class="material-icons red-text">delete</i></a></div>
-        </li>
-        <li class="collection-item">
-          <div>Deck<a href="#!" class="secondary-content"><i class="material-icons red-text">delete</i></a></div>
-        </li>
-        <li class="collection-item">
-          <div>Momo<a href="#!" class="secondary-content"><i class="material-icons red-text">delete</i></a></div>
-        </li>
-        <li class="collection-item">
-          <div>Deck<a href="#!" class="secondary-content"><i class="material-icons red-text">delete</i></a></div>
-        </li>
-        <li class="collection-item">
-          <div>Momo<a href="#!" class="secondary-content"><i class="material-icons red-text">delete</i></a></div>
-        </li>
-        <li class="collection-item">
-          <div>Deck<a href="#!" class="secondary-content"><i class="material-icons red-text">delete</i></a></div>
-        </li> -->
       </div>
     </ul>
   </div>
