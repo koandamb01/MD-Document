@@ -69,11 +69,23 @@ export class HttpService {
     return this._http.get('/getParticipants/' + data)
   }
 
+<<<<<<< HEAD
   removeParticipants(data) {
     console.log(data)
     return this._http.delete('/removeParticipants/' + data.target + '/' + data.killer + '/' + data.document)
+=======
+  removeParticipants(data){
+    return this._http.delete('/removeParticipants/'+data.target + '/' +data.killer + '/'+data.document)
+>>>>>>> cb90f707b2ace2d73b426bac7092492a3759d35a
   }
 
+  getDocument(){
+    return this._http.get('/getDocument')
+  }
+
+  inviteParticipants(data){
+    return this._http.post('/inviteParticipants', data)
+  }
 
 
 }

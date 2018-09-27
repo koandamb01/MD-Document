@@ -38,7 +38,9 @@ module.exports = (app) => {
 
     app.delete('/removeParticipants/:target/:killer/:docID', Controllers.removeParticipants)
 
+    app.get('/getDocument', Controllers.getDocument);
 
+    app.post('/inviteParticipants', Controllers.inviteParticipants);
     // app.delete('/deleteDocument/:DocId', Controllers.deleteDocument);
     // //done
     // //use socket to update document need fix

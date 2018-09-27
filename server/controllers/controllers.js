@@ -2,6 +2,8 @@ const bcrypt = require('bcrypt-as-promised');
 const { check, validationResult } = require('express-validator/check');
 const mysql = require('mysql');
 const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+const nodemailer = require('nodemailer');
+
 
 const db = mysql.createConnection({
     host: 'localhost',
@@ -20,6 +22,7 @@ db.connect((err) => {
 });
 
 module.exports = {
+
 
     // ######## REGISTRATION ######### //
     register: (req, res) => {
@@ -241,6 +244,48 @@ module.exports = {
         });
     },
 
+    inviteParticipants: (req, res) => {
+        sql = 'SELECT * FROM users WHERE ?';
+        let query = db.query(sql, req.body.email, (err, user) => {
+            if (err) {
+                res.json({ status: false, messages: "Server Error, try again later" });
+            }
+            else if (user.length == 0) {
+                res.json({ status: false, messages: "Could not find any user that matches the email" });
+            }
+            else {
+                console.log(req.body)
+                console.log(req.body.email)
+                var transporter = nodemailer.createTransport({
+                    service: 'gmail',
+                    auth: {
+                        user: 'mddocument11@gmail.com',
+                        pass: 'codingdojo1'
+                    }
+                });
+
+                var mailOptions = {
+                    from: 'mddocument11@gmail.com',
+                    to: req.body.email.email,
+                    subject: req.body.user_name + ' wants you as a participant to a MdDocument',
+                    text: req.body.user_name + ' would like to invite you to be a participant of the document. Click the link to accept your invitation.'
+                };
+
+                console.log(mailOptions);
+
+                transporter.sendMail(mailOptions, function (error, info) {
+                    if (error) {
+                        console.log(error);
+                    } else {
+                        console.log('Email sent: ' + info.response);
+                        res.json({ status: true, messages: "Invite Link Sent" })
+                    }
+                });
+            }
+
+        })
+    },
+
     //adding participants
     addParticipants: (req, res) => {
         sql = 'SELECT id FROM users WHERE ?';
@@ -326,7 +371,22 @@ module.exports = {
                 return { status: true, messages: { success: "Personal Info successfully Updated!" } };
             }
         });
-    }
+    },
+
+    getDocument: (req, res) => {
+        sql = `select documents.id, title from documents left join users_documents ON users_documents.document_id = documents.id where users_documents.user_id = ${req.session.user_id}`;
+        let query = db.query(sql, (err, documents) => {
+            if (err) {
+                res.json({ status: false, messages: err });
+            }
+            else if (documents.length == 0) {
+                res.json({ status: true, messages: "No documents" });
+            }
+            else {
+                res.json({ status: true, messages: documents })
+            }
+        })
+    },
 }
 
 
