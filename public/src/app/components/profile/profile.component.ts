@@ -27,14 +27,15 @@ export class ProfileComponent implements OnInit {
   passwordInfo: any;
   documentList = [];
   recentList = [];
-  notifications = [];
+  notifications: any;
   filter: any;
   hasNot: boolean;  //has Notification false at start
 
   ngOnInit() {
+    this.notifications = [];
     this.user = { first_name: "", last_name: "", user_name: "", email: "" };
     this.passwordInfo = { old_password: "", password: "", confirm_password: "" };
-    this.messages = { success: "", first_name: "", last_name: "", email: "", user_name: "", password: "", confirm_password: "" };
+    this.messages = { messages: { error: "", success: "" }, first_name: "", last_name: "", email: "", user_name: "", password: "", confirm_password: "" };
     this.filter = { title: '' };
     this.hasNot = false; //has Notification false at start
     this.getUserID();
@@ -166,7 +167,7 @@ export class ProfileComponent implements OnInit {
       else {
         this.notifications = response["notifications"];
         this.hasNot = true;
-        console.log("Got notification", this.notifications)
+        console.log("Got notification", this.notifications);
       }
     });
   }
@@ -181,24 +182,25 @@ export class ProfileComponent implements OnInit {
     let obs = this._httpService.deleteNotifications(notID);
     obs.subscribe(response => {
       if (response['status'] == false) {
-        console.log("Failed to delete notification");
+        this.messages = response['messages'];
+        setTimeout(() => { this.ngOnInit(); }, 2000);
       }
       else {
-        this.getNotifications();
+        this.messages = response['messages'];
+        setTimeout(() => { this.ngOnInit(); }, 2000);
       }
     });
   }
 
-  deleteDocument(docID){
+  deleteDocument(docID) {
     let obs = this._httpService.deleteDocument(docID);
-    obs.subscribe(response =>{
+    obs.subscribe(response => {
       if (response['status'] == false) {
         console.log("Failed to delete document");
       }
       else {
         this.grabDocument();
         this.getRecent();
-
       }
     })
   }

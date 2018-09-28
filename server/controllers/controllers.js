@@ -334,7 +334,7 @@ module.exports = {
                                         res.json({ status: false, messages: { success: "Email not sent but added on document" } })
                                     }
                                     else {
-                                        let data = { user_id: target_user[0].id, message: `${req.session.user_name} added you as a participant, good luck !` }
+                                        let data = { user_id: target_user[0].id, message: `${req.session.user_name} invited you to his/her project!` }
                                         let sql = "INSERT INTO notifications SET?"
                                         let query = db.query(sql, data, (err, result) => {
                                             if (err) {
@@ -458,10 +458,10 @@ module.exports = {
         sql = `DELETE FROM notifications WHERE user_id = ${req.session.user_id} AND notifications.id = ${req.params.notID}`
         let query = db.query(sql, (err, result) => {
             if (err) {
-                res.json({ status: false, messages: "Failed to delete notification" })
+                res.json({ status: false, messages: { error: "Failed to delete notification" } });
             }
             else {
-                res.json({ status: true, messages: { success: "Deleted notification" } })
+                res.json({ status: true, messages: { success: "Notification deleted successfully!" } });
             }
         })
     },
