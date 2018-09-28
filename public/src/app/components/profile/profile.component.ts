@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpService } from '../../http.service';
 import { ActivatedRoute, Params, Router } from '@angular/router';
+import { FilterPipe } from 'ngx-filter-pipe';
 
 @Component({
   selector: 'app-profile',
@@ -12,7 +13,8 @@ export class ProfileComponent implements OnInit {
   constructor(
     private _httpService: HttpService,
     private _route: ActivatedRoute,
-    private _router: Router) { }
+    private _router: Router,
+    private filterPipe: FilterPipe) { }
 
   // variables
   user: any;
@@ -20,13 +22,22 @@ export class ProfileComponent implements OnInit {
   messages: any;
   passwordInfo: any;
   documentList = [];
+  recentList = [];
+  notifications = [];
+  filter: any;
+  hasNot:boolean;  //has Notification false at start
+
   ngOnInit() {
     this.user = { first_name: "", last_name: "", user_name: "", email: "" };
     this.passwordInfo = { old_password: "", password: "", confirm_password: "" };
     this.messages = { success: "", first_name: "", last_name: "", email: "", user_name: "", password: "", confirm_password: "" };
+    this.filter = { title: '' };
+    this.hasNot = false; //has Notification false at start
     this.getUserID();
     this.getUserInfo();
     this.grabDocument();
+    this.getRecent();
+    this.getNotifications();
   }
 
   logout() {
@@ -116,21 +127,63 @@ export class ProfileComponent implements OnInit {
       }
       else if (response["messages"] == "No documents") {
         console.log(response["messages"])
-        console.log("grab")
       }
       else {
-<<<<<<< HEAD
-        console.log("grab")
-        this.documentList= response["messages"];
-=======
         this.documentList = response["documents"];
->>>>>>> ec5a4ded997cf7cfca578ff7890040c8eb8ece5a
-        console.log(this.documentList);
+        console.log("DocumentList", this.documentList);
+      }
+    });
+  }
+
+  getRecent(){
+    let obs = this._httpService.getRecent();
+    obs.subscribe(response =>{
+      if (response['status'] == false) {
+        this.messages = response['messages'];
+      }
+      else if (response["messages"] == "No documents") {
+        console.log(response["messages"])
+      }
+      else {
+        this.recentList = response["documents"];
+        console.log("Recent List", this.recentList);
+      }
+    });
+  }
+
+  getNotifications(){
+    let obs = this._httpService.getNotifications();
+    obs.subscribe(response =>{
+      if (response['status'] == false) {
+        this.messages = response['messages'];
+      }
+      else if (response["messages"] == "No notifications") {
+        console.log(response["messages"])
+        this.hasNot = false;
+      }
+      else {
+        this.notifications = response["notifications"];
+        console.log("Notifications", this.notifications);
+        this.hasNot = true;
       }
     });
   }
 
   editDocument(id) {
     this._router.navigate(['/document/' + id + '/edit']);
+  }
+
+  deleteNotifications(notID){
+    //Please pass in notification.ID as a parameter
+    let obs= this._httpService.deleteNotifications(notID);
+    obs.subscribe(response =>{
+      if (response['status'] == false) {
+        console.log("Failed to delete notification", response)
+      }
+      else {
+        console.log("Successfully deleted notification", response);
+        this.getNotifications();
+      }
+    });
   }
 }

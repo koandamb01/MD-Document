@@ -25,6 +25,7 @@
     "ng-socket-io": "^0.2.4",
     "ngx-bootstrap": "^3.0.1",
     "ngx-editor": "^3.3.0",
+    "ngx-filter-pipe": "^2.1.2",
     "nodemailer": "^4.6.8",
     "rxjs": "~6.2.0",
     "rxjs-compat": "^6.3.3",

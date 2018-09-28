@@ -1,7 +1,7 @@
 <div class="nav-box">
   <ul>
     <li><a href="#" style="cursor: pointer;" data-target="slide-out" class="sidenav-trigger"><i class="material-icons">menu</i></a></li>
-    <li><input class="input-search" type="text" placeholder="search"></li>
+    <li><input [(ngModel)]="filter.title" class="input-search" type="text" placeholder="Search by Title"></li>
     <li><a><i class="material-icons grey-text">notifications</i></a></li>
   </ul>
 </div>
@@ -77,21 +77,9 @@
       <img (click)="newDocument()" style="cursor: pointer" src="https://ssl.gstatic.com/docs/templates/thumbnails/docs-blank_1.png">
       <span class="white-text">Blank</span>
     </div>
-    <div class="docment">
-      <img src="https://ssl.gstatic.com/docs/templates/thumbnails/1XykI9TfWo4IoUqGLjQ-D8NIU4jZ1Ml9OI8-Euj5FrA0_400_3.png">
-      <span class="white-text">Form</span>
-    </div>
-    <div class="docment">
-      <img src="https://ssl.gstatic.com/docs/templates/thumbnails/1XykI9TfWo4IoUqGLjQ-D8NIU4jZ1Ml9OI8-Euj5FrA0_400_3.png">
-      <span class="white-text">Resume</span>
-    </div>
-    <div class="docment">
-      <img src="https://ssl.gstatic.com/docs/templates/thumbnails/1XykI9TfWo4IoUqGLjQ-D8NIU4jZ1Ml9OI8-Euj5FrA0_400_3.png">
-      <span class="white-text">Portfolio</span>
-    </div>
-    <div class="docment">
-      <img src="https://ssl.gstatic.com/docs/templates/thumbnails/1XykI9TfWo4IoUqGLjQ-D8NIU4jZ1Ml9OI8-Euj5FrA0_400_3.png">
-      <span class="white-text">Project</span>
+    <div *ngFor="let recent of recentList" class="docment">
+      <img style="cursor:pointer;" (click)="editDocument(recent.id)" src="https://ssl.gstatic.com/docs/templates/thumbnails/1XykI9TfWo4IoUqGLjQ-D8NIU4jZ1Ml9OI8-Euj5FrA0_400_3.png">
+      <span style="cursor:pointer;" (click)="editDocument(recent.id)" class="white-text">{{recent.title | slice:0:14}}</span>
     </div>
   </div>
 </div>
@@ -100,16 +88,21 @@
   <div class="container">
     <div class="row">
 
-      <div *ngFor="let document of documentList" class="col s2">
+      <div *ngFor="let document of documentList | filterBy: filter" class="col s2">
         <div class="card">
           <div class="card-image">
             <img (click)="editDocument(document.id)" style="cursor:pointer;" src="https://ssl.gstatic.com/docs/templates/thumbnails/1XykI9TfWo4IoUqGLjQ-D8NIU4jZ1Ml9OI8-Euj5FrA0_400_3.png">
             <span class="card-title"></span>
           </div>
           <div class="card-action">
-            <a (click)="editDocument(document.id)" style="cursor:pointer;">{{document.title | slice:0:10 }}...</a>
+            <a (click)="editDocument(document.id)" style="cursor:pointer;">{{document.title | slice:0:7 }}...</a>
           </div>
         </div>
+      </div>
+
+      <div *ngIf="(documentList | filterBy: filter).length == 0">
+        <h5>No Matching Document</h5>
+        <p>Create a new document by pressing the +</p>
       </div>
 
     </div>

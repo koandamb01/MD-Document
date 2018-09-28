@@ -5,6 +5,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { SocketIoModule, SocketIoConfig } from 'ng-socket-io';
 import { NgxEditorModule } from 'ngx-editor';
+import { FilterPipeModule } from 'ngx-filter-pipe';
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './components/login/login.component';
@@ -36,6 +37,7 @@ const config: SocketIoConfig = { url: 'http://localhost:8000', options: {} };
     SocketIoModule.forRoot(config),
     NgxEditorModule,
     TooltipModule.forRoot(),
+    FilterPipeModule
   ],
   providers: [HttpService],
   bootstrap: [AppComponent]
