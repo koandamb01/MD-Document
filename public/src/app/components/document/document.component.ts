@@ -66,6 +66,7 @@ export class DocumentComponent implements OnInit {
     obs.subscribe(response => {
       if (response["status"]) {
         this.participants = response["participants"];
+        console.log(this.participants);
       }
       else {
         this.errorMessage1 = response["messages"];
