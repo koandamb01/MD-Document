@@ -88,6 +88,10 @@ export class HttpService {
   deleteNotifications(notID){
     return this._http.delete('/deleteNotifications/'+notID)
   }
+
+  checkSession(){
+    return this._http.get('/checkSession')
+  }
   //invite
   // inviteParticipants(data) {
   //   return this._http.post('/inviteParticipants', data)

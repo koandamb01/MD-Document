@@ -21,6 +21,20 @@ export class LoginComponent implements OnInit {
   ngOnInit() {
     this.logUser = { email: "", password: "" };
     this.messages = { success: "", login: "" };
+    this.checkSession();
+  }
+
+  checkSession(){
+    let obs = this._httpService.checkSession();
+    obs.subscribe(response =>{
+      if(response['status']){
+        console.log(response['status'], "in session")
+        this.goProfile();
+      }
+      else{
+        console.log(response, "not in session");
+      }
+    })
   }
 
   login() {

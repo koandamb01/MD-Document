@@ -40,6 +40,14 @@ module.exports = (app) => {
 
     app.get('/getDocument', Controllers.getDocument);
 
+    app.get('/getRecent', Controllers.getRecent);
+
+    app.get('/getNotifications', Controllers.getNotifications);
+
+    app.delete('/deleteNotifications/:notID', Controllers.deleteNotifications);
+
+    app.get('/checkSession', Controllers.checkSession);
+
     // app.delete('/deleteDocument/:DocId', Controllers.deleteDocument);
     // //done
     // //use socket to update document need fix
