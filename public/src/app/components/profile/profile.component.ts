@@ -114,6 +114,7 @@ export class ProfileComponent implements OnInit {
         this.messages = response['messages'];
       }
       else {
+        localStorage.setItem('document_id_token', response['document_id']);
         this._router.navigate(['/document/' + response['document_id'] + '/edit']);
       }
     });
@@ -170,6 +171,7 @@ export class ProfileComponent implements OnInit {
   }
 
   editDocument(id) {
+    localStorage.setItem('document_id_token', id);
     this._router.navigate(['/document/' + id + '/edit']);
   }
 

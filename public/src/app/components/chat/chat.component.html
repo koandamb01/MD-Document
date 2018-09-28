@@ -1,0 +1,33 @@
+<ul class="collection">
+  <li class="collection-item active blue">Chat Room</li>
+  <div #scrollMe style="height: 400px; overflow-y: scroll;">
+    <li class="collection-item avatar">
+      <p class="secondary-content">Admin<br>
+        Welcome to the <i>First Project</i> Chat room!
+      </p>
+    </li>
+    <li class="collection-item avatar" *ngFor="let chat of chats">
+      <div *ngIf="chat.user_id == user_id; else others_users">
+        <img src="http://placehold.it/50/55C1E7/fff&text=ME" class="circle" alt="">
+        <p>{{ chat.message }}<br>
+          <span id="small-time">{{ chat.created_at | date: 'short' }}</span>
+        </p>
+      </div>
+
+      <ng-template #others_users>
+        <p class="secondary-content right-align black-text">{{ chat.user_name }}<br>
+          {{ chat.message }} <br>
+          <span id="small-time">{{ chat.created_at | date: 'short' }}</span>
+        </p>
+      </ng-template>
+    </li>
+  </div>
+  <li class="collection-item">
+    <div>
+      <form (submit)="sendMessage()">
+        <input type="text" name="message" #message="ngModel" [(ngModel)]="myMessage" placeholder="message..." required>
+        <button class="secondary-content"><i class="material-icons blue-text">send</i></button>
+      </form>
+    </div>
+  </li>
+</ul>
