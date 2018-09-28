@@ -425,7 +425,7 @@ module.exports = {
         })
     },
     getRecent: (req, res) => {
-        sql = `SELECT documents.id, title FROM documents LEFT JOIN users_documents ON users_documents.document_id = documents.id WHERE users_documents.user_id = ${req.session.user_id} ORDER BY documents.updated_at DESC LIMIT 4` ;
+        sql = `SELECT documents.id, title FROM documents LEFT JOIN users_documents ON users_documents.document_id = documents.id WHERE users_documents.user_id = ${req.session.user_id} ORDER BY documents.updated_at DESC LIMIT 4`;
         let query = db.query(sql, (err, documents) => {
             if (err) {
                 res.json({ status: false, messages: "Server is not working, try again later" });
@@ -442,17 +442,14 @@ module.exports = {
     getNotifications: (req, res) => {
         sql = `SELECT * FROM notifications WHERE user_id = ${req.session.user_id} ORDER BY notifications.updated_at DESC`
         let query = db.query(sql, (err, notifications) => {
-            if(err){
-                console.log("Here?1")
-                res.json({status:false, messages: "Server is not working, try again later"})
+            if (err) {
+                res.json({ status: false, messages: "Server is not working, try again later" })
             }
-            else if (notifications.length == 0){
-                console.log("Here?2")
-                res.json({status:true, messages: "No notifications"})
+            else if (notifications.length == 0) {
+                res.json({ status: true, messages: "No notifications" })
             }
-            else{
-                console.log("Here?3")
-                res.json({status: true, notifications: notifications})
+            else {
+                res.json({ status: true, notifications: notifications })
             }
         })
     },
@@ -481,12 +478,12 @@ module.exports = {
         })
     },
 
-    checkSession: (req, res) =>{
-        if (req.session.user_id){
-            res.json({status:true, messages: "Welcome Back"})
+    checkSession: (req, res) => {
+        if (req.session.user_id) {
+            res.json({ status: true, messages: "Welcome Back" })
         }
-        else{
-            res.json({status:false, messages: "Please Sign In"})
+        else {
+            res.json({ status: false, messages: "Please Sign In" })
         }
     },
 }

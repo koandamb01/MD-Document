@@ -11,6 +11,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatBadgeModule } from '@angular/material/badge';
 import { Ng2OrderModule } from 'ng2-order-pipe';
+import { MatMenuModule } from '@angular/material/menu';
+import { MDBBootstrapModule } from 'angular-bootstrap-md';
+
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './components/login/login.component';
@@ -42,13 +45,15 @@ const config: SocketIoConfig = { url: 'http://localhost:8000', options: {} };
     FormsModule,
     AppRoutingModule,
     SocketIoModule.forRoot(config),
-    NgxEditorModule,
     TooltipModule.forRoot(),
+    MDBBootstrapModule.forRoot(),
+    NgxEditorModule,
     FilterPipeModule,
     BrowserAnimationsModule,
     MatSidenavModule,
     Ng2OrderModule,
     MatBadgeModule,
+    MatMenuModule,
   ],
   providers: [HttpService],
   bootstrap: [AppComponent]
