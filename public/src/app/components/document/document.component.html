@@ -1,67 +1,71 @@
 <!-- Create the editor container -->
-<nav>
-  <div class="nav-wrapper blue">
-    <a href="#" data-target="slide-out" class="brand-logo right sidenav-trigger"><i class="material-icons">menu</i></a>
-    <ul id="nav-mobile" class="left hide-on-med-and-down">
-      <li>
-        <a [routerLink]="[ '/profile']"><i class="material-icons" style="cursor: pointer;">arrow_back</i></a>
-      </li>
-      <li>
-        <div class="input-field">
-          <input class="white-text" type="text" [(ngModel)]="document.title">
+<mat-drawer-container class="example-container" autosize>
+  <mat-drawer #drawer class="example-sidenav" mode="over" position="end">
+    <ul class="collection">
+      <li class="collection-item avatar center" style="background-image: url('../../../assets/images/village.jpg'); height: 200px;">
+        <div class="user-view">
+          <a href="#user"><img class="circle" src="../../../assets/images/Naruto.png"></a>
+          <a href="#name"><span class="white-text name">{{ user.first_name }} {{ user.last_name}}</span></a><br>
+          <a href="#email"><span class="white-text email">{{ user.email }}</span></a>
         </div>
       </li>
-      <li><a (click)="updateTitle()">Update</a></li>
-      <li><a><span class="white-text" *ngIf="messages.success">{{ messages.success }}</span></a></li>
-    </ul>
-  </div>
-</nav>
-
-<ul id="slide-out" class="sidenav">
-  <li>
-    <div class="user-view">
-      <div class="background">
-        <img src="../../../assets/images/village.jpg">
-      </div>
-      <a href="#user"><img class="circle" src="../../../assets/images/Naruto.png"></a>
-      <a href="#name"><span class="white-text name">{{ user.first_name }} {{ user.last_name}}</span></a>
-      <a href="#email"><span class="white-text email">{{ user.email }}</span></a>
-    </div>
-  </li>
-  <div class="divider"></div>
-  <li style="text-align: center;">
-    <a style="cursor: pointer;" class="red-text" (click)="logout()">Logout</a>
-  </li>
-  <!-- adding users by David -->
-  <form (submit)="addParticipants()">
-    <input [(ngModel)]="addingParticipants.email" ngModel name="email" type="email" placeholder="Enter Their Email">
-    <button class="waves-effect waves-light btn-small blue center">Send</button>
-  </form>
-  <!--  -->
-  <div class="divider"></div>
-  <br>
-  <div class="col s2 profile-box">
-    <ul class="collection with-header">
-      <li class="collection-item active blue">
-        Participants
+      <div class="divider"></div>
+      <li class="collection-item grey lighten-5" style="text-align: center;">
+        <a style="cursor: pointer;" class="red-text" (click)="logout()">Logout</a>
       </li>
-      <div style="height: 300px; overflow: scroll;">
-        <li class="collection-item" *ngFor="let user of participants; index as i">
-          <div><i class="fas fa-crown orange-text" *ngIf="i == 0"></i> {{user.user_name}} ({{user.first_name}}
-            {{user.last_name}})<a *ngIf="participants[0].id == user_id && user.id != user_id" (click)="removeParticipants(user.id)"
-              class="secondary-content" style="cursor:pointer;"><i class="material-icons red-text">delete</i></a></div>
-        </li>
+      <br>
+      <span class="red-text" *ngIf="messages.error">{{ messages.error }}</span>
+      <span class="blue-text" *ngIf="messages.success">{{ messages.success }}</span>
+      <!-- adding users by David -->
+      <form (submit)="addParticipants()">
+        <input [(ngModel)]="addingParticipants.email" ngModel name="email" #email="ngModel" type="email" placeholder="Invite by email"
+          required>
+        <button class="waves-effect waves-light btn-small blue" [disabled]="!email.valid">Send<i class="material-icons right">send</i></button>
+      </form>
+      <br>
+      <div class="col s2 profile-box">
+        <ul class="collection with-header">
+          <li class="collection-item active blue">
+            Participants
+          </li>
+          <div style="height: 500px; overflow: scroll;">
+            <li class="collection-item" *ngFor="let user of participants; index as i">
+              <div><i class="fas fa-crown orange-text" *ngIf="i == 0"></i> {{user.user_name}} ({{user.first_name}}
+                {{user.last_name}})<a *ngIf="participants[0].id == user_id && user.id != user_id" (click)="removeParticipants(user.id)"
+                  class="secondary-content" style="cursor:pointer;"><i class="material-icons red-text">delete</i></a></div>
+            </li>
+          </div>
+        </ul>
       </div>
     </ul>
-  </div>
-</ul>
+  </mat-drawer>
 
-<div class="row">
-  <div class="col s9">
-    <app-ngx-editor [placeholder]="'Enter text here...'" [spellcheck]="true" [(ngModel)]="document.content" (input)="onTyping($event)"></app-ngx-editor>
-  </div>
+  <div class="example-sidenav-content">
+    <nav>
+      <div class="nav-wrapper blue">
+        <a mat-button (click)="drawer.toggle()" style="cursor: pointer;" class="sidenav-trigger right"><i class="material-icons">menu</i></a>
+        <ul id="nav-mobile" class="left hide-on-med-and-down">
+          <li>
+            <a [routerLink]="[ '/profile']"><i class="material-icons" style="cursor: pointer;">arrow_back</i></a>
+          </li>
+          <li>
+            <div class="input-field">
+              <input class="white-text" type="text" [(ngModel)]="document.title">
+            </div>
+          </li>
+          <li><a (click)="updateTitle()">Update</a></li>
+          <li><a><span class="white-text" *ngIf="messages.success">{{ messages.success }}</span></a></li>
+        </ul>
+      </div>
+    </nav>
 
-  <div class="col s3">
-    <app-chat [docID]="document.id"></app-chat>
+    <div class="row">
+      <div class="col s9">
+        <app-ngx-editor [placeholder]="'Enter text here...'" [spellcheck]="true" [(ngModel)]="document.content" (input)="onTyping($event)"></app-ngx-editor>
+      </div>
+      <div class="col s3">
+        <app-chat [docID]="document.id" [document_title]="document.title"></app-chat>
+      </div>
+    </div>
   </div>
-</div>
+</mat-drawer-container>

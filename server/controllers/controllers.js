@@ -291,20 +291,20 @@ module.exports = {
         sql = 'SELECT id FROM users WHERE ?';
         let query = db.query(sql, req.body, (err, target_user) => {
             if (err) {
-                res.json({ status: false, messages: "Server Error, try again later" });
+                res.json({ status: false, messages: { error: "Server Error, try again later" } });
             }
             else if (target_user.length == 0) {
-                res.json({ status: false, messages: "Could not find any user that matches the email" });
+                res.json({ status: false, messages: { error: "Email doesn't exist in the system" } });
             }
             //validation here?
             else {
                 let sql = `SELECT * FROM users_documents WHERE user_id = ${target_user[0].id} and document_id = ${req.params.docID}`;
                 let query = db.query(sql, (err, check) => {
                     if (err) {
-                        res.json({ status: false, messages: { error: err } });
+                        res.json({ status: false, messages: { error: "Server Error, try again later" } });
                     }
                     else if (check.length > 0) {
-                        res.json({ status: false, messages: "User is already part of the document" })
+                        res.json({ status: false, messages: { error: "User is already part of the document" } })
                     }
                     else {
                         let ids = { user_id: target_user[0].id, document_id: req.params.docID };
@@ -312,7 +312,7 @@ module.exports = {
                         sql = 'INSERT INTO users_documents SET ?'
                         let query = db.query(sql, ids, (err, result) => {
                             if (err) {
-                                res.json({ status: false, messages: { error: err } });
+                                res.json({ status: false, messages: { error: "Server Error, try again later" } });
                             }
                             else {
                                 var transporter = nodemailer.createTransport({
@@ -322,33 +322,18 @@ module.exports = {
                                         pass: 'codingdojo1'
                                     }
                                 });
-                
+
                                 var mailOptions = {
                                     from: 'mddocument11@gmail.com',
                                     to: req.body.email,
                                     subject: req.session.user_name + ' added you as a participant to a MdDocument',
                                     text: req.session.user_name + ' added you to be a participant of the document. Let us know if this was a mistake'
                                 };
-                
-                                console.log(mailOptions);
-                
                                 transporter.sendMail(mailOptions, function (error, info) {
                                     if (error) {
-                                        console.log(error);
-                                        res.json({ status:false, messages: "Email not sent but user was added on document"})
-                                    } 
-                                    else {
-                                        console.log('Email sent: ' + info.response);
-                                        sql = 'INSERT INTO notifications SET ?'
-                                        let data = { user_id: target_user[0].id, message: `You have been added as a participant to a work document by ${req.session.user_name}.` }
-                                        let query = db.query(sql, data, (err, notification)=>{
-                                            if (err){
-                                                res.json({ status: false, messages: "Failed to send them a notification but user was added on document"})
-                                            }
-                                            else{
-                                                res.json({ status: true, messages: { success: "Participant successfully added!" }})
-                                            }
-                                        })
+                                        res.json({ status: false, messages: { success: "Email not sent but added on document" } })
+                                    } else {
+                                        res.json({ status: true, messages: { success: "Participant successfully added!" }, data: target_user[0].id })
                                     }
                                 });
                             }
@@ -360,18 +345,17 @@ module.exports = {
     },
 
     removeParticipants: (req, res) => {
-        console.log("###########", req.params.killer, req.session.user_id)
         if (req.session.user_id != req.params.killer) {
-            res.json({ status: false, messages: "You " })
+            res.json({ status: false, messages: { error: "You " } })
         }
         else {
             sql = `Delete from users_documents where user_id = ${req.params.target} AND document_id = ${req.params.docID}`;
             let query = db.query(sql, (err, users) => {
                 if (err) {
-                    res.json({ status: false, message: err })
+                    res.json({ status: false, messages: { error: "Server Error, try again later" } });
                 }
                 else {
-                    res.json({ status: true, messages: "User successfully removed from participant" })
+                    res.json({ status: true, messages: { success: "Participant successfully removed." } })
                 }
             })
         }
@@ -382,14 +366,14 @@ module.exports = {
         sql = `select users.id, first_name, last_name, email, user_name from users left join users_documents ON users_documents.user_id = users.id left join documents ON documents.id = users_documents.document_id where documents.id = ${req.params.docID};`;
         let query = db.query(sql, (err, users) => {
             if (err) {
-                res.json({ status: false, messages: err });
+                res.json({ status: false, messages: { error: "Server Error, try again later" } });
             }
             else if (users.length == 0) {
-                res.json({ status: false, messages: "sql Error" });
+                res.json({ status: false, messages: { error: "Server Error, try again later" } });
             }
             //validation here?
             else {
-                res.json({ status: true, messages: users })
+                res.json({ status: true, participants: users });
             }
         })
     },
@@ -481,267 +465,3 @@ module.exports = {
         }
     },
 }
-
-
-
-    // checkStatus: (req, res) => {
-    //     if (req.session.logged == true && req.session.user_id) {
-    //         res.json({ status: true, user_id: req.session.user_id });
-    //     }
-    //     else {
-    //         res.json({ status: false });
-    //     }
-    // },
-
-    // newDocument: (req, res) => {
-    //     Documents.create({})
-    //         .then(
-    //             document => {
-    //                 console.log(req.session.user_id, document)
-    //                 User.findOneAndUpdate({ _id: req.session.user_id }, { $push: { documents: document } })
-    //                     .then(
-    //                         data => {
-    //                             res.json({ status: true, messages: { success: "Document successfully created!" }, document: document })
-    //                         }
-    //                     )
-    //                     .catch(
-    //                         err => {
-    //                             let messages = {}
-    //                             for (let key in err.errors) {
-    //                                 messages[key] = err.errors[key].message;
-    //                             }
-    //                             res.json({ status: false, messages: "Error Updating User" });
-    //                         }
-    //                     )
-    //             }
-    //         )
-    //         .catch(
-    //             err => {
-    //                 let messages = {}
-    //                 for (let key in err.errors) {
-    //                     messages[key] = err.errors[key].message;
-    //                 }
-    //                 console.log("Error creating document", err)
-    //                 res.json({ status: false, messages: "Error creating document" });
-    //             }
-    //         )
-    // }, //done
-
-    // updatePersonalInfo: (req, res) => {
-    //     User.findOneAndUpdate({ _id: req.params.UserID }, { $set: { first_name: req.body.first_name, last_name: req.body.last_name, user_name: req.body.user_name, email: req.body.email } }, { runValidators: true, context: 'query' })
-    //         .then(
-    //             data => res.json({ status: true, messages: { success: "Personal Info successfully Updated!" }, user: data })
-    //         )
-    //         .catch(
-    //             err => {
-    //                 if (err) {
-    //                     let messages = {}
-    //                     for (let key in err.errors) {
-    //                         messages[key] = err.errors[key].message;
-    //                     }
-    //                     res.json({ status: false, messages: messages });
-    //                 }
-    //             }
-    //         )
-    // },
-
-    // // updatePassword(req, res){
-
-    // // }
-
-    // deleteDocument: (req, res) => {
-    //     Documents.findByIdAndRemove({ _id: req.params.id })
-    //         .then(
-    //             data => res.json({ status: true, messages: { success: "Document Successfully Deleted!" } })
-    //         )
-    //         .catch(
-    //             err => {
-    //                 let messages = {}
-    //                 for (let key in err.errors) {
-    //                     messages[key] = err.errors[key].message;
-    //                 }
-    //                 res.json({ status: false, messages: messages });
-    //             }
-    //             //or add manual message
-
-    //         )
-    // }, //fix error message
-
-    // updateTitle: (req, res) => {
-    //     Documents.findOneAndUpdate({ _id: req.params.DocID }, req.boby)
-    //         .then(
-    //             data => {
-    //                 res.json({ status: true, messages: { success: "Document Title Successfully Updated!" } })
-    //             }
-    //         )
-    //         .catch(
-    //             err => {
-    //                 let messages = {}
-    //                 for (let key in err.errors) {
-    //                     messages[key] = err.errors[key].message;
-    //                 }
-    //                 res.json({ status: false, messages: messages });
-    //             }
-    //         )
-
-    // },
-
-    // addUserToDocument: (req, res) => {
-    //     User.findOne({ _id: req.params.id }) //find by ID or Email
-    //         .then(
-    //             user => {
-    //                 Documents.findOneAndUpdate({ _id: req.params.DocID }, { $push: { users: user } })
-    //                     .then(
-    //                         result => {
-    //                             res.json({ status: true, messages: { success: "User successfully added" } })
-    //                         }
-    //                     )
-    //                     .catch(
-    //                         err => {
-    //                             let messages = {}
-    //                             for (let key in err.errors) {
-    //                                 messages[key] = err.errors[key].message;
-    //                             }
-    //                             res.json({ status: false, messages: messages });
-    //                         }
-    //                     )
-    //             }
-    //         )
-    //         .catch(
-    //             err => {
-    //                 let messages = {}
-    //                 for (let key in err.errors) {
-    //                     messages[key] = err.errors[key].message;
-    //                 }
-    //                 res.json({ status: false, messages: messages });
-    //             }
-    //         )
-
-    // }, //maybe fix
-
-    // inviteUser: (req, res) => {
-    //     Documents.findOne({ _id: req.params.DocID })
-    //         .then(
-    //             data => {
-    //                 //findby email?
-    //                 User.findOne({ email: req.body })
-    //                     .then(
-    //                         //automated email for invite link to addUserToDocument
-    //                         data => res.json({ status: true, messages: "Invite Link Sent" })
-    //                     )
-    //                     .catch(
-    //                         err => {
-    //                             let messages = {}
-    //                             for (let key in err.errors) {
-    //                                 messages[key] = err.errors[key].message;
-    //                             }
-    //                             res.json({ status: false, messages: messages });
-    //                         }
-    //                     )
-    //             }
-    //         )
-    //         .catch(
-    //             //maybe custom error message?
-    //             err => {
-    //                 let messages = {}
-    //                 for (let key in err.errors) {
-    //                     messages[key] = err.errors[key].message;
-    //                 }
-    //                 res.json({ status: false, messages: messages });
-    //             }
-    //         )
-    // }, //need more stuff and fix errors
-
-    // removeUserFromDoc: (req, res) => {
-    //     Documents.findOneAndUpdate({ _id: req.params.DocID }, { $pull: { users: { _id: user._id } } })
-    //         .then(
-    //             data => {
-    //                 res.json({ status: true, messages: { success: "User Successfully Removed!" } })
-    //             }
-    //         )
-    //         .catch(
-    //             error => {
-
-    //                 res.json({ status: false, messages: error })
-    //             }
-    //         )
-
-
-    // },  //change ID or EMAIL
-
-    // getUserInfo: (req, res) => {
-    //     User.findOne({ _id: req.session.user_id })
-    //         .then(
-    //             user => res.json({ status: true, data: user })
-    //         )
-    //         .catch(
-    //             error => res.json({ status: false, messages: error })
-    //         )
-    // },
-
-
-    // all: (req, res) => {
-    //     Product.find({}).sort({ updatedAt: -1 })
-    //         .then(
-    //             data => res.json({ status: true, products: data })
-    //         )
-    //         .catch(
-    //             error => res.json({ status: false, messages: error })
-    //         )
-    // },
-
-    // getOne: (req, res) => {
-    //     User.findOne({ _id: req.params.id })
-    //         .then(
-    //             data => res.json({ status: true, user: data })
-    //         )
-    //         .catch(
-    //             error => res.json({ status: false, messages: error })
-    //         )
-    // },
-
-    // create: (req, res) => {
-    //     Product.create(req.body)
-    //         .then(
-    //             data => res.json({ status: true, messages: { success: "Product successfully added!" }, product: data })
-    //         )
-    //         .catch(
-    //             err => {
-    //                 if (err) {
-    //                     let messages = {}
-    //                     for (let key in err.errors) {
-    //                         messages[key] = err.errors[key].message;
-    //                     }
-    //                     res.json({ status: false, messages: messages });
-    //                 }
-    //             }
-    //         )
-    // },
-
-    // update: (req, res) => {
-    //     Product.findOneAndUpdate({ _id: req.params.id }, { $set: req.body }, { runValidators: true, context: 'query' })
-    //         .then(
-    //             data => res.json({ status: true, messages: { success: "Product successfully Updated!" }, product: data })
-    //         )
-    //         .catch(
-    //             err => {
-    //                 if (err) {
-    //                     let messages = {}
-    //                     for (let key in err.errors) {
-    //                         messages[key] = err.errors[key].message;
-    //                     }
-    //                     res.json({ status: false, messages: messages });
-    //                 }
-    //             }
-    //         )
-    // },
-
-    // delete: (req, res) => {
-    //     Product.findByIdAndRemove({ _id: req.params.id })
-    //         .then(
-    //             data => res.json({ status: true, messages: { success: "Product successfully Delete!" }, product: data })
-    //         )
-    //         .catch(
-    //             error => req.json({ status: false, messages: error })
-    //         )
-    // }

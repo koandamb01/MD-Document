@@ -35,27 +35,28 @@ export class DocumentComponent implements OnInit {
   successMessage: any;
   participants = [];
   msg: any;
-  htmlContent: any;
 
   ngOnInit() {
-    this.addingParticipants = { email: "" }
+    this.addingParticipants = { email: "" };
     this.user = { first_name: "", last_name: "", user_name: "", email: "" };
-    this.messages = { title: "" };
+    this.messages = { title: "", status: "", messages: { error: "", success: "" } };
 
     this.getDocID();
     this.getUserID();
     this.getDocument();
     this.getUserInfo();
-
   }
+
   removeParticipants(userId) {
     let obs = this._httpService.removeParticipants({ target: userId, killer: this.user_id, document: this.docID });
     obs.subscribe(response => {
       if (response["status"]) {
-        this.getParticipants();
+        this.messages = response["messages"];
+        setTimeout(() => { this.ngOnInit() }, 2000);
       }
       else {
-        this.errorMessage1 = response["messages"];
+        this.messages = response["messages"];
+        setTimeout(() => { this.ngOnInit() }, 2000);
       }
     })
   }
@@ -64,7 +65,7 @@ export class DocumentComponent implements OnInit {
     let obs = this._httpService.getParticipants(this.docID);
     obs.subscribe(response => {
       if (response["status"]) {
-        this.participants = response["messages"];
+        this.participants = response["participants"];
       }
       else {
         this.errorMessage1 = response["messages"];
@@ -75,17 +76,16 @@ export class DocumentComponent implements OnInit {
   addParticipants() {
     let obs = this._httpService.addParticipants({ email: this.addingParticipants, docID: this.docID });
     obs.subscribe(response => {
-      console.log(response)
       if (response["status"]) {
-        this.successMessage = response["messages"];
-        this.getParticipants();
+        this.messages = response["messages"];
+        setTimeout(() => { this.ngOnInit() }, 2000);
       }
       else {
-        this.errorMessage1 = response["messages"];
+        this.messages = response["messages"];
+        setTimeout(() => { this.ngOnInit() }, 2000);
       }
     })
   }
-
 
   // get document ID
   getUserID() {

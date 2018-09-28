@@ -77,16 +77,16 @@ export class HttpService {
     return this._http.get('/getDocument')
   }
 
-  getRecent(){
+  getRecent() {
     return this._http.get('/getRecent')
   }
 
-  getNotifications(){
+  getNotifications() {
     return this._http.get('/getNotifications')
   }
 
-  deleteNotifications(notID){
-    return this._http.delete('/deleteNotifications/'+notID)
+  deleteNotifications(notID) {
+    return this._http.delete('/deleteNotifications/' + notID)
   }
 
   checkSession(){
