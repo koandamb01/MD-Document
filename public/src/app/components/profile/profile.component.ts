@@ -157,13 +157,16 @@ export class ProfileComponent implements OnInit {
     obs.subscribe(response => {
       if (response['status'] == false) {
         this.messages = response['messages'];
+        console.log("Error notification")
       }
       else if (response["messages"] == "No notifications") {
         this.hasNot = false;
+        console.log("No notification")
       }
       else {
         this.notifications = response["notifications"];
         this.hasNot = true;
+        console.log("Got notification", this.notifications)
       }
     });
   }

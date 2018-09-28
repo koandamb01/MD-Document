@@ -332,8 +332,18 @@ module.exports = {
                                 transporter.sendMail(mailOptions, function (error, info) {
                                     if (error) {
                                         res.json({ status: false, messages: { success: "Email not sent but added on document" } })
-                                    } else {
-                                        res.json({ status: true, messages: { success: "Participant successfully added!" }, data: target_user[0].id })
+                                    } 
+                                    else {
+                                        let data = {user_id: target_user[0].id, message: `${req.session.user_name} added you as a participant, good luck !`}
+                                        let sql = "INSERT INTO notifications SET?"
+                                        let query = db.query(sql, data, (err,result) =>{
+                                            if(err){
+                                                res.json({ status: false, messages: { success: "Notification not sent but added on document" } })
+                                            }
+                                            else{
+                                                res.json({ status: true, messages: { success: "Participant successfully added!" }})
+                                            }
+                                        })
                                     }
                                 });
                             }
@@ -407,7 +417,7 @@ module.exports = {
                 res.json({ status: false, messages: "Server is not working, try again later" });
             }
             else if (documents.length == 0) {
-                res.json({ status: true, messages: "No documents" });
+                res.json({ status: true, messages:  "No documents" });
             }
             else {
                 res.json({ status: true, documents: documents });
@@ -433,25 +443,40 @@ module.exports = {
         sql = `SELECT * FROM notifications WHERE user_id = ${req.session.user_id} ORDER BY notifications.updated_at DESC`
         let query = db.query(sql, (err, notifications) => {
             if(err){
+                console.log("Here?1")
                 res.json({status:false, messages: "Server is not working, try again later"})
             }
             else if (notifications.length == 0){
+                console.log("Here?2")
                 res.json({status:true, messages: "No notifications"})
             }
             else{
+                console.log("Here?3")
                 res.json({status: true, notifications: notifications})
             }
         })
     },
 
     deleteNotifications: (req,res) =>{
-        sql = `DELETE FROM notifications WHERE uer_id = ${req.session.user_id} AND notifications.id = ${req.params.notID}`
+        sql = `DELETE FROM notifications WHERE user_id = ${req.session.user_id} AND notifications.id = ${req.params.notID}`
         let query = db.query(sql, (err, result) =>{
             if(err){
                 res.json({status:false, messages: "Failed to delete notification"})
             }
             else{
-                res.json({status:true, messages: "Deleted notification"})
+                res.json({status:true, messages:{ success: "Deleted notification"}})
+            }
+        })
+    },
+
+    deleteDocument: (req, res) =>{
+        sql = `DELETE FROM users_documents where document_id = ${req.params.docID}`
+        let query = db.query(sql, (err, result)=>{
+            if(err){
+                res.json({status:false, messages: "Failed to delete document, try again later"})
+            }
+            else{
+                res.json({status:true, messages: { success:"Deleted document"}})
             }
         })
     },
