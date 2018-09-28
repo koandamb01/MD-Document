@@ -66,17 +66,12 @@
       <li class="collection-header blue">
         <p>Notifications</p>
       </li>
-      <li class="collection-item">
-        <div>Alvin<a href="#!" class="secondary-content"><i class="material-icons red-text">delete</i></a></div>
-      </li>
-      <li class="collection-item">
-        <div>Alvin<a href="#!" class="secondary-content"><i class="material-icons red-text">delete</i></a></div>
-      </li>
-      <li class="collection-item">
-        <div>Alvin<a href="#!" class="secondary-content"><i class="material-icons red-text">delete</i></a></div>
-      </li>
-      <li class="collection-item">
-        <div>Alvin<a href="#!" class="secondary-content"><i class="material-icons red-text">delete</i></a></div>
+      <span class="red-text center-align" *ngIf="messages.error">{{ messages.error }}</span>
+      <span class="blue-text center-align" *ngIf="messages.success">{{ messages.success }}</span>
+      <div class="divider"></div>
+      <li class="collection-item" *ngFor="let notification of notifications">
+        <div>{{ notification.message }}<a style="cursor: pointer;" class="secondary-content" (click)="deleteNotifications(notification.id)"><i
+              class="material-icons red-text">delete</i></a></div>
       </li>
     </ul>
   </mat-drawer>
