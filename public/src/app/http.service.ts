@@ -92,6 +92,10 @@ export class HttpService {
   checkSession(){
     return this._http.get('/checkSession')
   }
+
+  deleteDocument(docID){
+    return this._http.get('/deleteDocument/'+docID)
+  }
   //invite
   // inviteParticipants(data) {
   //   return this._http.post('/inviteParticipants', data)

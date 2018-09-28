@@ -181,10 +181,25 @@ export class ProfileComponent implements OnInit {
     let obs = this._httpService.deleteNotifications(notID);
     obs.subscribe(response => {
       if (response['status'] == false) {
+        console.log("Failed to delete notification");
       }
       else {
         this.getNotifications();
       }
     });
+  }
+
+  deleteDocument(docID){
+    let obs = this._httpService.deleteDocument(docID);
+    obs.subscribe(response =>{
+      if (response['status'] == false) {
+        console.log("Failed to delete document");
+      }
+      else {
+        this.grabDocument();
+        this.getRecent();
+
+      }
+    })
   }
 }
