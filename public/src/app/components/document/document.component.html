@@ -57,11 +57,11 @@
 </ul>
 
 <div class="row">
-  <div class="col s8">
+  <div class="col s9">
     <app-ngx-editor [placeholder]="'Enter text here...'" [spellcheck]="true" [(ngModel)]="document.content" (input)="onTyping($event)"></app-ngx-editor>
   </div>
 
-  <div class="col s4">
-    <p>Chat here</p>
+  <div class="col s3">
+    <app-chat [docID]="document.id"></app-chat>
   </div>
 </div>

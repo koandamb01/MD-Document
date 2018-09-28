@@ -103,6 +103,7 @@ export class ProfileComponent implements OnInit {
         this.messages = response['messages'];
       }
       else {
+        localStorage.setItem('document_id_token', response['document_id']);
         this._router.navigate(['/document/' + response['document_id'] + '/edit']);
       }
     });
@@ -119,18 +120,14 @@ export class ProfileComponent implements OnInit {
         console.log("grab")
       }
       else {
-<<<<<<< HEAD
-        console.log("grab")
-        this.documentList= response["messages"];
-=======
         this.documentList = response["documents"];
->>>>>>> ec5a4ded997cf7cfca578ff7890040c8eb8ece5a
         console.log(this.documentList);
       }
     });
   }
 
   editDocument(id) {
+    localStorage.setItem('document_id_token', id);
     this._router.navigate(['/document/' + id + '/edit']);
   }
 }

@@ -39,13 +39,13 @@ io.on('connection', function (socket) {
         sql = `UPDATE documents SET ? WHERE id = ${document.document_id}`;
         Controllers.db.query(sql, { content: document.content }, (err, result) => {
             if (err) {
-                return { status: false, messages: "MySQL error" };
+                console.log('SQL ERROR: ', err);
             }
             else {
                 sql = `SELECT * FROM documents WHERE id = ${document.document_id}`;
                 let query = Controllers.db.query(sql, (err, row) => {
                     if (err) {
-                        res.json({ status: false });
+                        console.log('SQL ERROR: ', err);
                     }
                     else {
                         io.emit('saveDocumentDone', { status: true, messages: { success: "Saving..." }, document: row[0] });
@@ -56,6 +56,52 @@ io.on('connection', function (socket) {
 
 
     });
+
+
+    // ############### MESSAGES LOGIC BELOW ##################
+    socket.on('document_id', (docID => {
+        // get all the message of that document
+        sql = `SELECT users.id as user_id, users.user_name as user_name, chats.message, chats.created_at as created_at from users LEFT JOIN chats on users.id = chats.user_id LEFT JOIN documents on documents.id = chats.document_id WHERE documents.id = ${docID}`;
+        let query = Controllers.db.query(sql, (err, rows) => {
+            if (err) {
+                console.log('SQL ERROR: ', err);
+            }
+            else {
+                console.log("Messages: ", rows);
+                io.emit('documentMessages_' + docID, { status: true, chats: rows });
+            }
+        });
+    }));
+
+    socket.on('send_message', (messageInfo) => {
+        console.log("Message: ", messageInfo);
+        sql = 'INSERT INTO chats SET ?'
+        let query = Controllers.db.query(sql, messageInfo, (err, result) => {
+            if (err) {
+                return { status: false, messages: "MySQL error" };
+            } else {
+                // get all the message of that document
+                sql = `SELECT users.id as user_id, users.user_name as user_name, chats.message, chats.created_at as created_at from users LEFT JOIN chats on users.id = chats.user_id LEFT JOIN documents on documents.id = chats.document_id WHERE documents.id = ${messageInfo.document_id}`;
+                let query = Controllers.db.query(sql, (err, rows) => {
+                    if (err) {
+                        console.log('SQL ERROR: ', err);
+                    }
+                    else {
+                        console.log("Messages: ", rows);
+                        io.emit('documentMessages_' + messageInfo.document_id, { status: true, chats: rows });
+                    }
+                });
+            }
+        });
+    });
+
+
+
+
+
+
+
+
 
     socket.on('disconnect', function () {
         console.log('User disconnected');

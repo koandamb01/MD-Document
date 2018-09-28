@@ -15,6 +15,7 @@ import { LogregComponent } from './components/logreg/logreg.component';
 import { NotfoundComponent } from './components/notfound/notfound.component';
 import { DocumentComponent } from './components/document/document.component';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
+import { ChatComponent } from './components/chat/chat.component';
 
 const config: SocketIoConfig = { url: 'http://localhost:8000', options: {} };
 
@@ -26,7 +27,8 @@ const config: SocketIoConfig = { url: 'http://localhost:8000', options: {} };
     ProfileComponent,
     LogregComponent,
     NotfoundComponent,
-    DocumentComponent
+    DocumentComponent,
+    ChatComponent
   ],
   imports: [
     BrowserModule,

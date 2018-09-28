@@ -15,8 +15,8 @@ export class DocumentComponent implements OnInit {
     private _httpService: HttpService,
     private _route: ActivatedRoute,
     private _router: Router,
-    private _chatService: ChatService) {
-
+    private _chatService: ChatService
+  ) {
     this._chatService.onConnect().subscribe(data => { console.log(data); });
     this._chatService.saveDocumentDone().subscribe(response => {
       this.messages = response['messages'];
@@ -72,15 +72,15 @@ export class DocumentComponent implements OnInit {
     })
   }
 
-  addParticipants(){
-    let obs = this._httpService.addParticipants({email: this.addingParticipants, docID:  this.docID});
-    obs.subscribe(response =>{
-      console.log( response )
-      if(response["status"]){
+  addParticipants() {
+    let obs = this._httpService.addParticipants({ email: this.addingParticipants, docID: this.docID });
+    obs.subscribe(response => {
+      console.log(response)
+      if (response["status"]) {
         this.successMessage = response["messages"];
         this.getParticipants();
       }
-      else{
+      else {
         this.errorMessage1 = response["messages"];
       }
     })

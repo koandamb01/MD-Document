@@ -14,3 +14,16 @@
 ul li:nth-child(1){
     padding-left: 10px;
 }
+
+
+ul li.avatar{
+    min-height: 70px;
+}
+
+/* ul li.avatar p{
+    margin-top: 10px;
+} */
+
+.right-box{
+    margin-right: 20px;
+}
