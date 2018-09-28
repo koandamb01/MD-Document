@@ -1,12 +1,13 @@
 <ul class="collection">
   <li class="collection-item active blue">Chat Room</li>
   <div #scrollMe style="height: 400px; overflow-y: scroll;">
-    <li class="collection-item avatar">
-      <p class="secondary-content">Admin<br>
-        Welcome to the <i>First Project</i> Chat room!
-      </p>
+    <li class="collection-item">
+      <h6 class="center-align blue-text">
+        Welcome to the <b>{{ document_title }}</b> Chat room!
+      </h6>
     </li>
-    <li class="collection-item avatar" *ngFor="let chat of chats">
+    <li class="collection-item avatar" *ngFor="let chat of chats | orderBy: 'created_at'">
+
       <div *ngIf="chat.user_id == user_id; else others_users">
         <img src="http://placehold.it/50/55C1E7/fff&text=ME" class="circle" alt="">
         <p>{{ chat.message }}<br>
@@ -25,7 +26,7 @@
   <li class="collection-item">
     <div>
       <form (submit)="sendMessage()">
-        <input type="text" name="message" #message="ngModel" [(ngModel)]="myMessage" placeholder="message..." required>
+        <input type="text" name="message" #message="ngModel" [(ngModel)]="myMessage" placeholder="Message..." required>
         <button class="secondary-content"><i class="material-icons blue-text">send</i></button>
       </form>
     </div>

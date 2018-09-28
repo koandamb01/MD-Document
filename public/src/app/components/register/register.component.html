@@ -2,7 +2,7 @@
   <div class="register-box">
     <h3 class="text blue-text">MD Document</h3>
     <p>Create your MD Document Account</p>
-    <span class="green-text" *ngIf="messages.success">{{ messages.success }}</span>
+    <span class="blue-text" *ngIf="messages.success">{{ messages.success }}</span>
     <div class="row">
       <div class="col s6">
         <form (submit)="register()">
@@ -70,8 +70,7 @@
             </div>
           </div>
 
-          <!-- <button class="waves-effect waves-light btn-small blue" [disabled]="!first_name.valid || !last_name.valid || !user_name.valid || !email.valid || !password.valid">Register</button> -->
-          <button class="waves-effect waves-light btn-small blue">Register</button>
+          <button class="waves-effect waves-light btn-small blue" [disabled]="!first_name.valid || !last_name.valid || !user_name.valid || !email.valid || !password.valid">Register</button>
           <a [routerLink]="['/']">Sign In</a>
         </form>
       </div>

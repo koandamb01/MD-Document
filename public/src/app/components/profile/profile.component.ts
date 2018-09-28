@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { HttpService } from '../../http.service';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { FilterPipe } from 'ngx-filter-pipe';
+import 'hammerjs';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatBadgeModule } from '@angular/material/badge';
 
 @Component({
   selector: 'app-profile',
@@ -16,6 +19,7 @@ export class ProfileComponent implements OnInit {
     private _router: Router,
     private filterPipe: FilterPipe) { }
 
+  showFiller = false;
   // variables
   user: any;
   user_id: any;
@@ -25,7 +29,7 @@ export class ProfileComponent implements OnInit {
   recentList = [];
   notifications = [];
   filter: any;
-  hasNot:boolean;  //has Notification false at start
+  hasNot: boolean;  //has Notification false at start
 
   ngOnInit() {
     this.user = { first_name: "", last_name: "", user_name: "", email: "" };
@@ -127,44 +131,38 @@ export class ProfileComponent implements OnInit {
         this.messages = response['messages'];
       }
       else if (response["messages"] == "No documents") {
-        console.log(response["messages"])
       }
       else {
         this.documentList = response["documents"];
-        console.log("DocumentList", this.documentList);
       }
     });
   }
 
-  getRecent(){
+  getRecent() {
     let obs = this._httpService.getRecent();
-    obs.subscribe(response =>{
+    obs.subscribe(response => {
       if (response['status'] == false) {
         this.messages = response['messages'];
       }
       else if (response["messages"] == "No documents") {
-        console.log(response["messages"])
       }
       else {
         this.recentList = response["documents"];
-        console.log("Recent List", this.recentList);
       }
     });
   }
 
-  getNotifications(){
+  getNotifications() {
     let obs = this._httpService.getNotifications();
-    obs.subscribe(response =>{
+    obs.subscribe(response => {
       if (response['status'] == false) {
         this.messages = response['messages'];
       }
       else if (response["messages"] == "No notifications") {
-        console.log(response["messages"])
         this.hasNot = false;
       }
       else {
         this.notifications = response["notifications"];
-        console.log("Notifications", this.notifications);
         this.hasNot = true;
       }
     });
@@ -175,15 +173,13 @@ export class ProfileComponent implements OnInit {
     this._router.navigate(['/document/' + id + '/edit']);
   }
 
-  deleteNotifications(notID){
+  deleteNotifications(notID) {
     //Please pass in notification.ID as a parameter
-    let obs= this._httpService.deleteNotifications(notID);
-    obs.subscribe(response =>{
+    let obs = this._httpService.deleteNotifications(notID);
+    obs.subscribe(response => {
       if (response['status'] == false) {
-        console.log("Failed to delete notification", response)
       }
       else {
-        console.log("Successfully deleted notification", response);
         this.getNotifications();
       }
     });

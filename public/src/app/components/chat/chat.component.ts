@@ -11,6 +11,7 @@ import { pipes, HumanizePipe } from 'angular2-humanize';
 })
 export class ChatComponent implements OnInit {
   @Input() docID: any;
+  @Input() document_title: any;
   @ViewChild('scrollMe') private myScrollContainer: ElementRef;
 
   constructor(

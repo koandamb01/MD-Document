@@ -291,20 +291,20 @@ module.exports = {
         sql = 'SELECT id FROM users WHERE ?';
         let query = db.query(sql, req.body, (err, target_user) => {
             if (err) {
-                res.json({ status: false, messages: "Server Error, try again later" });
+                res.json({ status: false, messages: { error: "Server Error, try again later" } });
             }
             else if (target_user.length == 0) {
-                res.json({ status: false, messages: "Could not find any user that matches the email" });
+                res.json({ status: false, messages: { error: "Email doesn't exist in the system" } });
             }
             //validation here?
             else {
                 let sql = `SELECT * FROM users_documents WHERE user_id = ${target_user[0].id} and document_id = ${req.params.docID}`;
                 let query = db.query(sql, (err, check) => {
                     if (err) {
-                        res.json({ status: false, messages: { error: err } });
+                        res.json({ status: false, messages: { error: "Server Error, try again later" } });
                     }
                     else if (check.length > 0) {
-                        res.json({ status: false, messages: "User is already part of the document" })
+                        res.json({ status: false, messages: { error: "User is already part of the document" } })
                     }
                     else {
                         let ids = { user_id: target_user[0].id, document_id: req.params.docID };
@@ -312,7 +312,7 @@ module.exports = {
                         sql = 'INSERT INTO users_documents SET ?'
                         let query = db.query(sql, ids, (err, result) => {
                             if (err) {
-                                res.json({ status: false, messages: { error: err } });
+                                res.json({ status: false, messages: { error: "Server Error, try again later" } });
                             }
                             else {
                                 var transporter = nodemailer.createTransport({
@@ -322,22 +322,17 @@ module.exports = {
                                         pass: 'codingdojo1'
                                     }
                                 });
-                
+
                                 var mailOptions = {
                                     from: 'mddocument11@gmail.com',
                                     to: req.body.email,
                                     subject: req.session.user_name + ' added you as a participant to a MdDocument',
                                     text: req.session.user_name + ' added you to be a participant of the document. Let us know if this was a mistake'
                                 };
-                
-                                console.log(mailOptions);
-                
                                 transporter.sendMail(mailOptions, function (error, info) {
                                     if (error) {
-                                        console.log(error);
-                                        res.json({ status:false, messages: "Email not sent but added on document"})
+                                        res.json({ status: false, messages: { success: "Email not sent but added on document" } })
                                     } else {
-                                        console.log('Email sent: ' + info.response);
                                         res.json({ status: true, messages: { success: "Participant successfully added!" }, data: target_user[0].id })
                                     }
                                 });
@@ -350,18 +345,17 @@ module.exports = {
     },
 
     removeParticipants: (req, res) => {
-        console.log("###########", req.params.killer, req.session.user_id)
         if (req.session.user_id != req.params.killer) {
-            res.json({ status: false, messages: "You " })
+            res.json({ status: false, messages: { error: "You " } })
         }
         else {
             sql = `Delete from users_documents where user_id = ${req.params.target} AND document_id = ${req.params.docID}`;
             let query = db.query(sql, (err, users) => {
                 if (err) {
-                    res.json({ status: false, message: err })
+                    res.json({ status: false, messages: { error: "Server Error, try again later" } });
                 }
                 else {
-                    res.json({ status: true, messages: "User successfully removed from participant" })
+                    res.json({ status: true, messages: { success: "Participant successfully removed." } })
                 }
             })
         }
@@ -372,14 +366,14 @@ module.exports = {
         sql = `select users.id, first_name, last_name, email, user_name from users left join users_documents ON users_documents.user_id = users.id left join documents ON documents.id = users_documents.document_id where documents.id = ${req.params.docID};`;
         let query = db.query(sql, (err, users) => {
             if (err) {
-                res.json({ status: false, messages: err });
+                res.json({ status: false, messages: { error: "Server Error, try again later" } });
             }
             else if (users.length == 0) {
-                res.json({ status: false, messages: "sql Error" });
+                res.json({ status: false, messages: { error: "Server Error, try again later" } });
             }
             //validation here?
             else {
-                res.json({ status: true, messages: users })
+                res.json({ status: true, participants: users });
             }
         })
     },

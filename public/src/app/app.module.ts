@@ -7,6 +7,11 @@ import { SocketIoModule, SocketIoConfig } from 'ng-socket-io';
 import { NgxEditorModule } from 'ngx-editor';
 import { FilterPipeModule } from 'ngx-filter-pipe';
 
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatBadgeModule } from '@angular/material/badge';
+import { Ng2OrderModule } from 'ng2-order-pipe';
+
 import { AppComponent } from './app.component';
 import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
@@ -29,7 +34,7 @@ const config: SocketIoConfig = { url: 'http://localhost:8000', options: {} };
     LogregComponent,
     NotfoundComponent,
     DocumentComponent,
-    ChatComponent
+    ChatComponent,
   ],
   imports: [
     BrowserModule,
@@ -39,7 +44,11 @@ const config: SocketIoConfig = { url: 'http://localhost:8000', options: {} };
     SocketIoModule.forRoot(config),
     NgxEditorModule,
     TooltipModule.forRoot(),
-    FilterPipeModule
+    FilterPipeModule,
+    BrowserAnimationsModule,
+    MatSidenavModule,
+    Ng2OrderModule,
+    MatBadgeModule,
   ],
   providers: [HttpService],
   bootstrap: [AppComponent]
