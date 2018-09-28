@@ -60,14 +60,36 @@
     </ul>
   </mat-drawer>
 
+  <mat-drawer #drawer2 class="example-sidenav" mode="push" position="start">
+
+    <ul class="collection with-header">
+      <li class="collection-header blue">
+        <p>Notifications</p>
+      </li>
+      <li class="collection-item">
+        <div>Alvin<a href="#!" class="secondary-content"><i class="material-icons red-text">delete</i></a></div>
+      </li>
+      <li class="collection-item">
+        <div>Alvin<a href="#!" class="secondary-content"><i class="material-icons red-text">delete</i></a></div>
+      </li>
+      <li class="collection-item">
+        <div>Alvin<a href="#!" class="secondary-content"><i class="material-icons red-text">delete</i></a></div>
+      </li>
+      <li class="collection-item">
+        <div>Alvin<a href="#!" class="secondary-content"><i class="material-icons red-text">delete</i></a></div>
+      </li>
+    </ul>
+  </mat-drawer>
+
   <div class="example-sidenav-content">
     <div class="nav-box">
       <ul>
-        <li><a mat-button (click)="drawer.toggle()" style="cursor: pointer;" class="sidenav-trigger"><i class="material-icons">menu</i></a></li>
+        <li><a mat-button (click)="drawer2.toggle()" style="cursor: pointer;" class="sidenav-trigger"><i class="material-icons">notifications</i></a></li>
         <li><input [(ngModel)]="filter.title" class="input-search" type="text" placeholder="Search by Title"></li>
-        <li><a><i class="material-icons grey-text">notifications</i></a></li>
+        <li><a mat-button (click)="drawer.toggle()" style="cursor: pointer;" class="sidenav-trigger"><i class="material-icons">menu</i></a></li>
       </ul>
     </div>
+
     <div class="top-header">
       <div class="container">
         <div class="row">
