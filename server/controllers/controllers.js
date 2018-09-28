@@ -192,7 +192,7 @@ module.exports = {
 
     // create a new document
     newDocument: (req, res) => {
-        let data = { title: "untitled document", content: "start typing here" };
+        let data = { title: "untitled document", content: "start typing here", owner_id: req.session.user_id };
         sql = 'INSERT INTO documents SET ?'
         let query = db.query(sql, data, (err, result) => {
             if (err) {
@@ -466,8 +466,20 @@ module.exports = {
         })
     },
 
+    // deleteDocument: (req, res) => {
+    //     sql = `DELETE FROM users_documents where document_id = ${req.params.docID}`
+    //     let query = db.query(sql, (err, result) => {
+    //         if (err) {
+    //             res.json({ status: false, messages: "Failed to delete document, try again later" })
+    //         }
+    //         else {
+    //             res.json({ status: true, messages: { success: "Deleted document" } })
+    //         }
+    //     })
+    // },
+
     deleteDocument: (req, res) => {
-        sql = `DELETE FROM users_documents where document_id = ${req.params.docID}`
+        sql = `DELETE FROM documents where document_id = ${req.params.docID}`
         let query = db.query(sql, (err, result) => {
             if (err) {
                 res.json({ status: false, messages: "Failed to delete document, try again later" })
@@ -487,3 +499,24 @@ module.exports = {
         }
     },
 }
+
+
+// select users.id, first_name from users left join users_documents ON users_documents.user_id = users.id left join documents ON documents.id = users_documents.document_id where documents.id = 8;
+
+
+// Delete from users_documents where document_id = 16; 
+
+// Delete from documents where id = 17;
+
+// select * from users_documents ORDER BY document_id desc;
+
+// select *  from users;
+
+// select * from notifications;
+
+
+// INSERT INTO notifications SET user_id= 2, message = "Hello";
+
+// select documents.id, title from documents left join users_documents ON users_documents.document_id = documents.id where users_documents.user_id = 2;
+
+// select users.id, first_name, last_name, email, user_name from users left join users_documents ON users_documents.user_id = users.id left join documents ON documents.id = users_documents.document_id where documents.id = 20;
