@@ -12,7 +12,6 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatBadgeModule } from '@angular/material/badge';
 import { Ng2OrderModule } from 'ng2-order-pipe';
 import { MatMenuModule } from '@angular/material/menu';
-import { MDBBootstrapModule } from 'angular-bootstrap-md';
 
 
 import { AppComponent } from './app.component';
@@ -46,7 +45,6 @@ const config: SocketIoConfig = { url: 'http://localhost:8000', options: {} };
     AppRoutingModule,
     SocketIoModule.forRoot(config),
     TooltipModule.forRoot(),
-    MDBBootstrapModule.forRoot(),
     NgxEditorModule,
     FilterPipeModule,
     BrowserAnimationsModule,
