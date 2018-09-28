@@ -48,6 +48,8 @@ module.exports = (app) => {
 
     app.get('/checkSession', Controllers.checkSession);
 
+    app.get('/deleteDocument/:docID', Controllers.deleteDocument)
+
     // app.delete('/deleteDocument/:DocId', Controllers.deleteDocument);
     // //done
     // //use socket to update document need fix
